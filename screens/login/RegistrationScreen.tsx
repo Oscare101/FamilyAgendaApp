@@ -30,7 +30,7 @@ export default function RegistrationScreen({ navigation }: any) {
     if (!response.error) {
       navigation.reset({
         index: 0,
-        routes: [{ name: 'MainScreen' }],
+        routes: [{ name: 'NewUserScreen' }],
       })
     } else {
       setError(response.error)

@@ -4,8 +4,15 @@ import { auth } from '../../firebase'
 import BGCircles from '../../components/BGCircles'
 import Button from '../../components/Button'
 import { LogOut } from '../../functions/actions'
+import { useEffect, useState } from 'react'
+import { getDatabase, onValue, ref } from 'firebase/database'
+import { User } from '../../constants/interfaces'
+import { RootState } from '../../redux'
+import { useSelector } from 'react-redux'
+import ProfileHeader from '../../components/ProfileHeader'
 
 export default function MainScreen({ navigation }: any) {
+  const user: User = useSelector((state: RootState) => state.user)
   function LogOutFunc() {
     LogOut()
     navigation.reset({
@@ -17,8 +24,10 @@ export default function MainScreen({ navigation }: any) {
   return (
     <View style={styles.container}>
       <BGCircles />
-
-      <Text>{auth.currentUser?.email}</Text>
+      <ProfileHeader title={user?.name} action={() => {}} />
+      <Text>
+        {auth.currentUser?.email}.{user?.name}
+      </Text>
       <Button title="LogOut" disable={false} action={LogOutFunc} />
     </View>
   )
@@ -29,6 +38,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.bg,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
 })

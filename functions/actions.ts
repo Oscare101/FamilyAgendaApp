@@ -15,6 +15,7 @@ import {
   remove,
 } from 'firebase/database'
 import { ref as refStorage, deleteObject } from 'firebase/storage'
+import { NewUser } from './function'
 
 // REGISTRATION LOGIN LOGOUT
 
@@ -25,7 +26,7 @@ export async function Registration(email: string, password: string) {
 
     await AsyncStorage.setItem('email', email)
     await AsyncStorage.setItem('password', password)
-    // await SetNewUser(email)
+    await SetNewUser(email)
     return { response: response }
   } catch (error: any) {
     if (error.code.includes('email-already-in-use')) {
@@ -61,5 +62,26 @@ export async function LogOut() {
     return { response: response }
   } catch (error: any) {
     return { error: 'error' }
+  }
+}
+
+// USER
+
+export async function SetNewUser(email: string) {
+  try {
+    await set(
+      ref(getDatabase(), 'user/' + email.replace('.', ',')),
+      NewUser(email)
+    )
+  } catch (error) {
+    console.log('SetNewUser', error)
+  }
+}
+
+export async function UpdateUser(email: string, data: any) {
+  try {
+    update(ref(getDatabase(), 'user/' + email.replace('.', ',')), data)
+  } catch (error) {
+    console.log('UpdateUser', error)
   }
 }
