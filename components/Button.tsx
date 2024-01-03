@@ -37,7 +37,7 @@ export default function Button(props: ButtonProps) {
           color: props.disable ? colors.comment : colors.text,
         }}
       >
-        Login
+        {props.title}
       </Text>
     </TouchableOpacity>
   )

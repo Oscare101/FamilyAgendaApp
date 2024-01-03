@@ -35,7 +35,7 @@ export default function InputTextBlock(props: InputTextBlockProps) {
         <></>
       )}
       <TextInput
-        placeholder="email"
+        placeholder={props.type}
         value={props.value}
         placeholderTextColor={colors.comment}
         secureTextEntry={!open}

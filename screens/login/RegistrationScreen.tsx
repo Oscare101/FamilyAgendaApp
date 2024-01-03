@@ -13,20 +13,20 @@ import { useState } from 'react'
 import InputTextBlock from '../../components/InputTextBlock'
 import Button from '../../components/Button'
 import rules from '../../constants/rules'
-import { LogIn } from '../../functions/actions'
+import { LogIn, Registration } from '../../functions/actions'
 import { auth } from '../../firebase'
 import Header from '../../components/Header'
 const width = Dimensions.get('screen').width
 
-export default function LoginScreen({ navigation }: any) {
+export default function RegistrationScreen({ navigation }: any) {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
 
-  async function LogInFunc() {
+  async function RegistrationFunc() {
     setLoading(true)
-    const response = await LogIn(email, password)
+    const response = await Registration(email, password)
     if (!response.error) {
       navigation.reset({
         index: 0,
@@ -37,13 +37,14 @@ export default function LoginScreen({ navigation }: any) {
       setLoading(false)
     }
   }
+
   return (
     <View style={styles.container}>
       <BGCircles />
       <Header title="" action={() => navigation.goBack()} />
 
       <View style={styles.column}>
-        <Text style={styles.title}>Login</Text>
+        <Text style={styles.title}>Registration</Text>
         <View style={{ width: '100%', alignItems: 'center' }}>
           <InputTextBlock
             icon="person-outline"
@@ -65,7 +66,7 @@ export default function LoginScreen({ navigation }: any) {
           />
           <Text style={styles.error}>{error}</Text>
           <Button
-            title="Login"
+            title="Creat account"
             disable={
               !(
                 rules.emailTest.test(email) &&
@@ -73,7 +74,7 @@ export default function LoginScreen({ navigation }: any) {
                 !loading
               )
             }
-            action={LogInFunc}
+            action={RegistrationFunc}
           />
         </View>
         <View />
