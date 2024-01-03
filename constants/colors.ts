@@ -4,4 +4,5 @@ export default {
   card: '#FFFFFD',
   comment: '#8B8B8A',
   line: '#25252550',
+  active: '#B5D4CA',
 }
