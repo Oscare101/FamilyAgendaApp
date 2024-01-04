@@ -11,11 +11,15 @@ import { auth } from './firebase'
 import { getDatabase, onValue, ref } from 'firebase/database'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateUser } from './redux/user'
-import { User } from './constants/interfaces'
+import { Family, User } from './constants/interfaces'
 import { onAuthStateChanged } from 'firebase/auth'
+import { RootState } from './redux'
+import { updateFamily } from './redux/family'
 
 export default function App() {
   function AppComponent() {
+    const user: User = useSelector((state: RootState) => state.user)
+
     const dispatch = useDispatch()
     useEffect(() => {
       NavigationBar.setBackgroundColorAsync(colors.bg)
@@ -33,6 +37,21 @@ export default function App() {
         })
       }
     }
+
+    async function GetFamilyData(id: string) {
+      if (auth.currentUser && auth.currentUser.email) {
+        const data = ref(getDatabase(), `family/` + id)
+        onValue(data, (snapshot) => {
+          dispatch(updateFamily(snapshot.val() as Family))
+        })
+      }
+    }
+
+    useEffect(() => {
+      if (user.currentFamilyId) {
+        GetFamilyData(user.currentFamilyId)
+      }
+    }, [user])
 
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (user) => {

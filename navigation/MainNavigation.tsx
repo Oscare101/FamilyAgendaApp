@@ -9,6 +9,9 @@ import MainScreen from '../screens/application/MainScreen'
 
 import LaunchScreen from '../screens/login/LaunchScreen'
 import NewUserScreen from '../screens/login/NewUserScreen'
+import CreateFamilyScreen from '../screens/application/CreateFamilyScreen'
+import ChatScreen from '../screens/application/ChatScreen'
+import FamilyScreen from '../screens/application/FamilyScreen'
 
 const Stack = createStackNavigator()
 
@@ -62,6 +65,42 @@ export default function MainNavigation() {
         }}
         name="MainScreen"
         component={MainScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerLeft: () => null,
+          animationEnabled: true,
+          gestureDirection: 'horizontal',
+          gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        name="CreateFamilyScreen"
+        component={CreateFamilyScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerLeft: () => null,
+          animationEnabled: true,
+          gestureDirection: 'horizontal',
+          gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        name="ChatScreen"
+        component={ChatScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerLeft: () => null,
+          animationEnabled: true,
+          gestureDirection: 'horizontal',
+          gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        name="FamilyScreen"
+        component={FamilyScreen}
       />
     </Stack.Navigator>
   )

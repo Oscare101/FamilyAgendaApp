@@ -85,3 +85,13 @@ export async function UpdateUser(email: string, data: any) {
     console.log('UpdateUser', error)
   }
 }
+
+// FAMILY
+
+export async function CreateFamily(data: any) {
+  try {
+    await set(ref(getDatabase(), 'family/' + data.id), data)
+  } catch (error) {
+    console.log('CreateFamily', error)
+  }
+}
