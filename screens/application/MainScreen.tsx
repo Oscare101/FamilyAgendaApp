@@ -15,13 +15,14 @@ import Button from '../../components/Button'
 import { LogOut } from '../../functions/actions'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { getDatabase, onValue, ref } from 'firebase/database'
-import { Family, User } from '../../constants/interfaces'
+import { Family, Task, User } from '../../constants/interfaces'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import ProfileHeader from '../../components/ProfileHeader'
 import MainUserCircles from '../../components/MainUserCircles'
 import BottomModalBlock from '../../components/BottomModalBlock'
 import { Ionicons } from '@expo/vector-icons'
+import { GetDateTime, GetLastUpdated } from '../../functions/function'
 
 const width = Dimensions.get('screen').width
 
@@ -30,6 +31,16 @@ export default function MainScreen({ navigation }: any) {
   const family: Family = useSelector((state: RootState) => state.family)
 
   function RenderFolderItem({ item, index }: any) {
+    const lastAction = family.folder[item.id]?.task
+      ? Object.values(family.folder[item.id].task).sort(
+          (a: Task, b: Task) => +b.created - +a.created
+        )[0].created
+      : 0
+
+    const lastUpdated = family.folder[item.id]?.task
+      ? GetLastUpdated(lastAction)
+      : '-'
+
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -61,7 +72,10 @@ export default function MainScreen({ navigation }: any) {
               height: '100%',
             }}
           >
-            <Text>last update:{'\n'}-</Text>
+            <Text>
+              last update:{'\n'}
+              {lastUpdated}
+            </Text>
             <Ionicons name={item.icon} size={width * 0.1} color={colors.text} />
           </View>
         </View>

@@ -24,6 +24,8 @@ import InputTextBlock from '../../components/InputTextBlock'
 import Button from '../../components/Button'
 import { CreateTask } from '../../functions/actions'
 import { auth } from '../../firebase'
+import BottomModalBlock from '../../components/BottomModalBlock'
+import { GetDateTime, GetLastUpdated } from '../../functions/function'
 
 const width = Dimensions.get('screen').width
 
@@ -35,7 +37,7 @@ export default function FolderScreen({ navigation, route }: any) {
   const [loading, setLoading] = useState<boolean>(false)
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
-  const snapPoints = useMemo(() => [400, '100%'], [])
+  const snapPoints = useMemo(() => ['100%'], []) // TODO
 
   async function CreateTaskFunc() {
     Keyboard.dismiss()
@@ -54,6 +56,23 @@ export default function FolderScreen({ navigation, route }: any) {
     }
   }
 
+  function RenderTask({ item }: any) {
+    return (
+      <View style={styles.card}>
+        <Text style={styles.taskTitle}>{item.title}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <Text>{GetLastUpdated(item.created)}</Text>
+        </View>
+      </View>
+    )
+  }
+
   return (
     <BottomSheetModalProvider>
       <View style={styles.container}>
@@ -65,7 +84,7 @@ export default function FolderScreen({ navigation, route }: any) {
           }}
         />
 
-        <InputTextBlock
+        {/* <InputTextBlock
           value={title}
           setValue={(value: string) => setTitle(value)}
           icon="text-outline"
@@ -75,9 +94,47 @@ export default function FolderScreen({ navigation, route }: any) {
           title="Add"
           disable={!(title && !loading)}
           action={CreateTaskFunc}
-        />
-        {/* {family.folder[route.params.folderId].data ? <FlatList data={}  />:<></>} */}
+        /> */}
+        <View style={styles.rowBetween}>
+          <Button
+            title="Add"
+            disable={false}
+            action={() => {
+              // bottomSheetModalRef.current?.present()
+            }}
+            style={{ width: '49%' }}
+          />
+          <Button
+            title="Add"
+            disable={false}
+            action={() => {
+              bottomSheetModalRef.current?.present()
+            }}
+            style={{ width: '49%' }}
+          />
+        </View>
+
+        {family.folder[route.params.folderId]?.task &&
+        Object.values(family.folder[route.params.folderId]?.task).length ? (
+          <FlatList
+            style={{ width: '100%' }}
+            data={Object.values(family.folder[route.params.folderId].task).sort(
+              (a: Task, b: Task) => +b.created - +a.created
+            )}
+            renderItem={RenderTask}
+          />
+        ) : (
+          <></>
+        )}
       </View>
+      <BottomModalBlock
+        bottomSheetModalRef={bottomSheetModalRef}
+        snapPoints={snapPoints}
+        dismiss={() => bottomSheetModalRef.current?.dismiss()}
+        content={'taskBlock'}
+        setTitle={(value: string) => setTitle(value)}
+        title={setTitle}
+      />
     </BottomSheetModalProvider>
   )
 }
@@ -88,5 +145,23 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
     alignItems: 'center',
     justifyContent: 'flex-start',
+  },
+  rowBetween: {
+    width: '92%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  card: {
+    width: '92%',
+    backgroundColor: colors.card,
+    flexDirection: 'column',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    borderRadius: width * 0.03,
+    padding: width * 0.02,
+  },
+  taskTitle: {
+    fontSize: width * 0.05,
   },
 })

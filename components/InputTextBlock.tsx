@@ -10,6 +10,7 @@ interface InputTextBlockProps {
   setValue: any
   icon: keyof typeof Ionicons.glyphMap | ''
   type: string
+  style?: any
 }
 
 export default function InputTextBlock(props: InputTextBlockProps) {
@@ -17,17 +18,20 @@ export default function InputTextBlock(props: InputTextBlockProps) {
 
   return (
     <View
-      style={{
-        width: '92%',
-        height: width * 0.15,
-        backgroundColor: colors.card,
-        borderRadius: width * 0.05,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: '4%',
-        marginTop: width * 0.05,
-      }}
+      style={[
+        {
+          width: '92%',
+          height: width * 0.15,
+          backgroundColor: colors.card,
+          borderRadius: width * 0.05,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingHorizontal: '4%',
+          marginTop: width * 0.05,
+        },
+        props.style,
+      ]}
     >
       {props.icon ? (
         <Ionicons name={props.icon} size={width * 0.06} color={colors.text} />
@@ -45,7 +49,7 @@ export default function InputTextBlock(props: InputTextBlockProps) {
           fontSize: width * 0.06,
           flex: 1,
           textAlign: 'left',
-          marginLeft: '4%',
+          marginLeft: props.icon ? '4%' : '0%',
           color: colors.text,
         }}
         onChangeText={(value: string) => props.setValue(value)}

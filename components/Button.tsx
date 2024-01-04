@@ -13,6 +13,7 @@ interface ButtonProps {
   title: string
   disable: boolean
   action: any
+  style?: any
 }
 
 export default function Button(props: ButtonProps) {
@@ -21,16 +22,19 @@ export default function Button(props: ButtonProps) {
       activeOpacity={0.8}
       onPress={props.action}
       disabled={props.disable}
-      style={{
-        width: '92%',
-        height: width * 0.15,
-        backgroundColor: props.disable ? colors.card : colors.active,
-        borderRadius: width * 0.05,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: width * 0.05,
-      }}
+      style={[
+        {
+          width: '92%',
+          height: width * 0.15,
+          backgroundColor: props.disable ? colors.card : colors.active,
+          borderRadius: width * 0.05,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: width * 0.05,
+        },
+        props.style,
+      ]}
     >
       <Text
         style={{

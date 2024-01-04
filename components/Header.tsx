@@ -29,7 +29,9 @@ export default function Header(props: HeaderProps) {
           color={colors.text}
         />
       </TouchableOpacity>
-      <Text style={styles.title}>{props.title}</Text>
+      <Text numberOfLines={1} style={styles.title}>
+        {props.title}
+      </Text>
     </View>
   )
 }

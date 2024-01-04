@@ -38,9 +38,9 @@ export default function IconColorBlockModal(props: any) {
     return (
       <TouchableOpacity
         style={{
-          width: width * 0.94 * 0.18,
+          width: width * 0.18,
           height: 40,
-          margin: width * 0.94 * 0.01,
+          margin: width * 0.01,
           borderWidth: 1,
           borderRadius: 8,
           alignItems: 'center',
@@ -58,9 +58,9 @@ export default function IconColorBlockModal(props: any) {
     return (
       <TouchableOpacity
         style={{
-          width: width * 0.94 * 0.18,
-          height: width * 0.94 * 0.18,
-          margin: width * 0.94 * 0.01,
+          width: width * 0.18,
+          height: width * 0.18,
+          margin: width * 0.01,
           borderWidth: 1,
           borderRadius: 8,
           alignItems: 'center',

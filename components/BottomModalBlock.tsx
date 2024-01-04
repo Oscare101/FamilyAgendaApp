@@ -19,6 +19,7 @@ import {
 import { useMemo, useRef, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import IconColorBlockModal from './IconColorBlockModal'
+import TaskBlockModal from './TaskBlockModal'
 
 const width = Dimensions.get('screen').width
 
@@ -30,6 +31,12 @@ export default function BottomModalBlock(props: any) {
         setColor={(value: string) => props.setColor(value)}
         icon={props.icon}
         color={props.color}
+      />
+    ),
+    taskBlock: (
+      <TaskBlockModal
+        setTitle={(value: string) => props.setTitle(value)}
+        title={props.title}
       />
     ),
   }
@@ -46,7 +53,7 @@ export default function BottomModalBlock(props: any) {
     <BottomSheetModal
       backgroundStyle={{ backgroundColor: '#00000000' }}
       handleIndicatorStyle={{
-        backgroundColor: '#00000000',
+        backgroundColor: '#FFF',
       }}
       ref={props.bottomSheetModalRef}
       snapPoints={props.snapPoints}
@@ -69,14 +76,14 @@ export default function BottomModalBlock(props: any) {
         style={{
           backgroundColor: colors.card,
           flex: 1,
-          borderRadius: width * 0.05,
-          margin: width * 0.03,
+          borderTopRightRadius: width * 0.05,
+          borderTopLeftRadius: width * 0.05,
+
+          // margin: width * 0.03,
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'flex-start',
           overflow: 'hidden',
-          borderWidth: 1,
-          borderColor: colors.text,
         }}
       >
         {contentData[props.content]}
