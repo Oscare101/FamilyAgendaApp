@@ -32,9 +32,7 @@ export default function MainScreen({ navigation }: any) {
     <View style={styles.container}>
       <BGCircles />
       <ProfileHeader navigation={navigation} />
-      {/* <Text>
-        {auth.currentUser?.email}.{user?.name}
-      </Text> */}
+
       {user.familiesId?.length ? (
         <>
           <MainUserCircles navigation={navigation} />
@@ -46,7 +44,6 @@ export default function MainScreen({ navigation }: any) {
           action={() => navigation.navigate('CreateFamilyScreen')}
         />
       )}
-      {/* <Button title="LogOut" disable={false} action={LogOutFunc} /> */}
     </View>
   )
 }
@@ -57,5 +54,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
     alignItems: 'center',
     justifyContent: 'flex-start',
+  },
+  rowBetween: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 })

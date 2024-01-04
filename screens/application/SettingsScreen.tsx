@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react'
 import { auth } from '../../firebase'
 import { getDatabase, onValue, ref } from 'firebase/database'
 import Button from '../../components/Button'
+import { LogOut } from '../../functions/actions'
 
 const width = Dimensions.get('screen').width
 
@@ -27,6 +28,14 @@ export default function SettingsScreen({ navigation }: any) {
   const [users, setUsers] = useState<any>({})
 
   const [openFamilies, setOpenFamilies] = useState<any[]>([])
+
+  function LogOutFunc() {
+    LogOut()
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'FirstScreen' }],
+    })
+  }
 
   async function GetUserFamilies() {
     if (auth.currentUser && auth.currentUser.email) {
@@ -146,6 +155,7 @@ export default function SettingsScreen({ navigation }: any) {
           <Text style={styles.userEmail}>{user.email}</Text>
         </View>
       </View>
+      <Button title="LogOut" disable={false} action={LogOutFunc} />
       <Text style={styles.comment}>Your families:</Text>
       {families.length && Object.values(users).length ? (
         <FlatList

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import colors from '../../constants/colors'
 import { auth } from '../../firebase'
 import BGCircles from '../../components/BGCircles'
@@ -12,11 +12,14 @@ import Header from '../../components/Header'
 import InputTextBlock from '../../components/InputTextBlock'
 import { getDatabase, onValue, ref } from 'firebase/database'
 
+const width = Dimensions.get('screen').width
+
 export default function EnterFamilyScreen({ navigation }: any) {
   const user: User = useSelector((state: RootState) => state.user)
 
   const [name, setName] = useState<string>('')
-  const [password, setPAssword] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const [error, setError] = useState<string>('')
 
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -37,11 +40,14 @@ export default function EnterFamilyScreen({ navigation }: any) {
 
   async function EnterFamilyFunc() {
     setLoading(true)
+    setError('')
     const foundFamily = families.find(
       (f: Family) => f.name === name && f.password === password
     )
+
     if (
       foundFamily !== undefined &&
+      !foundFamily.users.includes(auth.currentUser?.email?.replace('.', ',')) &&
       auth.currentUser &&
       auth.currentUser.email
     ) {
@@ -60,6 +66,7 @@ export default function EnterFamilyScreen({ navigation }: any) {
       await UpdateUser(auth.currentUser.email, newUserData)
       navigation.goBack()
     } else {
+      setError('some error')
       setLoading(false)
     }
   }
@@ -76,10 +83,11 @@ export default function EnterFamilyScreen({ navigation }: any) {
       />
       <InputTextBlock
         value={password}
-        setValue={(value: string) => setPAssword(value)}
+        setValue={(value: string) => setPassword(value)}
         icon="lock-closed-outline"
         type="password"
       />
+      <Text style={styles.error}>{error}</Text>
       <Button
         title="Enter"
         disable={!(name && password && !loading && families.length)}
@@ -95,5 +103,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
     alignItems: 'center',
     justifyContent: 'flex-start',
+  },
+  error: {
+    fontSize: width * 0.04,
+    color: colors.errorText,
   },
 })
