@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useEffect, useState } from 'react'
 import { auth } from '../../firebase'
 import { getDatabase, onValue, ref } from 'firebase/database'
+import Button from '../../components/Button'
 
 const width = Dimensions.get('screen').width
 
@@ -50,7 +51,10 @@ export default function SettingsScreen({ navigation }: any) {
   }
 
   useEffect(() => {
-    GetUserFamilies()
+    if (user.familiesId?.length) {
+      GetUserFamilies()
+    }
+
     GetUsers()
   }, [])
 
@@ -143,14 +147,22 @@ export default function SettingsScreen({ navigation }: any) {
         </View>
       </View>
       <Text style={styles.comment}>Your families:</Text>
-      <FlatList
-        style={{ width: '100%' }}
-        data={[
-          ...families.filter((f: any) => f.id === user.currentFamilyId),
-          ...families.filter((f: any) => f.id !== user.currentFamilyId),
-        ]}
-        renderItem={RenderFamilyCardItem}
-      />
+      {families.length && Object.values(users).length ? (
+        <FlatList
+          style={{ width: '100%' }}
+          data={[
+            ...families.filter((f: any) => f.id === user.currentFamilyId),
+            ...families.filter((f: any) => f.id !== user.currentFamilyId),
+          ]}
+          renderItem={RenderFamilyCardItem}
+        />
+      ) : (
+        <Button
+          title="Create family"
+          disable={false}
+          action={() => navigation.navigate('CreateFamilyScreen')}
+        />
+      )}
     </View>
   )
 }

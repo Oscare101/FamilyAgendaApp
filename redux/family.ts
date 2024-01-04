@@ -5,7 +5,8 @@ const initialState: Family = {
   name: '',
   id: '',
   users: [],
-  creator: '',
+  admin: '',
+  password: '',
 }
 
 const familySlice = createSlice({

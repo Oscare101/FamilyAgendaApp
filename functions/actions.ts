@@ -95,3 +95,11 @@ export async function CreateFamily(data: any) {
     console.log('CreateFamily', error)
   }
 }
+
+export async function UpdateFamily(data: any) {
+  try {
+    update(ref(getDatabase(), 'family/' + data.id), data)
+  } catch (error) {
+    console.log('UpdateFamily', error)
+  }
+}

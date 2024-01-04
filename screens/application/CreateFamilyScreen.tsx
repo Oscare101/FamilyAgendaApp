@@ -5,7 +5,7 @@ import BGCircles from '../../components/BGCircles'
 import Button from '../../components/Button'
 import { CreateFamily, UpdateUser } from '../../functions/actions'
 import { useState } from 'react'
-import { User } from '../../constants/interfaces'
+import { Family, User } from '../../constants/interfaces'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import Header from '../../components/Header'
@@ -24,11 +24,12 @@ export default function CreateFamilyScreen({ navigation }: any) {
       const id: string =
         auth.currentUser.email.replace('.', ',') + new Date().getTime()
 
-      const data = {
+      const data: Family = {
         name: name,
-        creator: auth.currentUser.email,
+        admin: auth.currentUser.email,
         id: id,
         users: [auth.currentUser.email.replace('.', ',')],
+        password: Math.random().toString(36).slice(-6),
       }
       await CreateFamily(data)
 

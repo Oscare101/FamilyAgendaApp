@@ -13,6 +13,7 @@ import CreateFamilyScreen from '../screens/application/CreateFamilyScreen'
 import ChatScreen from '../screens/application/ChatScreen'
 import FamilyScreen from '../screens/application/FamilyScreen'
 import SettingsScreen from '../screens/application/SettingsScreen'
+import EnterFamilyScreen from '../screens/application/EnterFamilyScreen'
 
 const Stack = createStackNavigator()
 
@@ -78,6 +79,18 @@ export default function MainNavigation() {
         }}
         name="CreateFamilyScreen"
         component={CreateFamilyScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerLeft: () => null,
+          animationEnabled: true,
+          gestureDirection: 'horizontal',
+          gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        name="EnterFamilyScreen"
+        component={EnterFamilyScreen}
       />
       <Stack.Screen
         options={{

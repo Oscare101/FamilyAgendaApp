@@ -1,24 +1,102 @@
-import { StyleSheet, Text, View } from 'react-native'
+import {
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import colors from '../../constants/colors'
 import BGCircles from '../../components/BGCircles'
-import { User } from '../../constants/interfaces'
+import { Family, User } from '../../constants/interfaces'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import Header from '../../components/Header'
+import { useEffect, useState } from 'react'
+import { getDatabase, onValue, ref } from 'firebase/database'
+import { auth } from '../../firebase'
+import { Ionicons } from '@expo/vector-icons'
+
+const width = Dimensions.get('screen').width
 
 export default function FamilyScreen({ navigation }: any) {
   const user: User = useSelector((state: RootState) => state.user)
+  const family: Family = useSelector((state: RootState) => state.family)
+
+  const [users, setUsers] = useState<any>({})
+
+  async function GetUsers() {
+    if (auth.currentUser && auth.currentUser.email) {
+      const data = ref(getDatabase(), `user/`)
+      onValue(data, (snapshot) => {
+        setUsers(snapshot.val())
+      })
+    }
+  }
+
+  useEffect(() => {
+    GetUsers()
+  }, [])
+
+  function RenderFamilyUser({ item }: any) {
+    return (
+      <View style={styles.rowBetween}>
+        <Text numberOfLines={1} style={styles.userItemName}>
+          {users![item]!.name}
+        </Text>
+        {users![item]!.email === family.admin ? (
+          <Text numberOfLines={1} style={styles.userItemComment}>
+            admin
+          </Text>
+        ) : family.admin === auth.currentUser?.email ? (
+          <TouchableOpacity
+            style={{
+              backgroundColor: colors.errorBG,
+              height: width * 0.07,
+              paddingHorizontal: width * 0.03,
+              borderRadius: width * 0.01,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Ionicons
+              name="person-remove-outline"
+              size={width * 0.06}
+              color={colors.errorText}
+            />
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
+      </View>
+    )
+  }
 
   return (
     <View style={styles.container}>
       <BGCircles />
       <Header
-        title={'Family'}
+        title={family.name}
         action={() => {
           navigation.goBack()
         }}
       />
-      <Text>family</Text>
+      <View style={[styles.rowBetween, { width: '92%' }]}>
+        <Text style={styles.text}>Family password:</Text>
+        <Text style={styles.text}>{family.password}</Text>
+      </View>
+      <Text style={styles.comment}>Family users:</Text>
+      <View style={styles.card}>
+        {Object.values(users).length ? (
+          <FlatList
+            style={{ width: '100%' }}
+            data={family.users}
+            renderItem={RenderFamilyUser}
+          />
+        ) : (
+          <></>
+        )}
+      </View>
     </View>
   )
 }
@@ -30,4 +108,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
+  card: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '92%',
+    padding: '4%',
+    borderRadius: width * 0.03,
+    backgroundColor: colors.card,
+    marginTop: width * 0.03,
+    alignSelf: 'center',
+  },
+  comment: {
+    fontSize: width * 0.04,
+    color: colors.comment,
+    width: '92%',
+    textAlign: 'left',
+    marginTop: width * 0.03,
+  },
+  text: {
+    fontSize: width * 0.04,
+    color: colors.text,
+    marginTop: width * 0.03,
+  },
+  rowBetween: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  userItemName: { fontSize: width * 0.05, color: colors.text },
+  userItemComment: { fontSize: width * 0.05, color: colors.comment },
 })

@@ -2,7 +2,8 @@ export interface Family {
   id: string
   name: string
   users: string[]
-  creator: string
+  admin: string
+  password: string
 }
 
 export interface User {

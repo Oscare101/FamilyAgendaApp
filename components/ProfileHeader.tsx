@@ -79,7 +79,10 @@ export default function ProfileHeader({ navigation }: any) {
           activeOpacity={0.8}
           style={styles.familyButton}
           onPress={() => {
-            GetUserFamilies()
+            if (user.familiesId?.length) {
+              GetUserFamilies()
+            }
+
             setModal(true)
           }}
         >
@@ -118,25 +121,46 @@ export default function ProfileHeader({ navigation }: any) {
                 data={families}
                 renderItem={RenderFamilyItem}
                 ListFooterComponent={() => (
-                  <TouchableOpacity
-                    style={styles.familyItemButton}
-                    activeOpacity={0.8}
-                    onPress={() => {
-                      setModal(false)
-                      navigation.navigate('CreateFamilyScreen')
-                    }}
-                  >
-                    <Ionicons
-                      name="add"
-                      size={width * 0.05}
-                      color={colors.comment}
-                    />
-                    <Text
-                      style={[styles.familyName, { color: colors.comment }]}
+                  <>
+                    <TouchableOpacity
+                      style={styles.familyItemButton}
+                      activeOpacity={0.8}
+                      onPress={() => {
+                        setModal(false)
+                        navigation.navigate('CreateFamilyScreen')
+                      }}
                     >
-                      Create
-                    </Text>
-                  </TouchableOpacity>
+                      <Ionicons
+                        name="add"
+                        size={width * 0.05}
+                        color={colors.comment}
+                      />
+                      <Text
+                        style={[styles.familyName, { color: colors.comment }]}
+                      >
+                        Create
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.familyItemButton}
+                      activeOpacity={0.8}
+                      onPress={() => {
+                        setModal(false)
+                        navigation.navigate('EnterFamilyScreen')
+                      }}
+                    >
+                      <Ionicons
+                        name="add"
+                        size={width * 0.05}
+                        color={colors.comment}
+                      />
+                      <Text
+                        style={[styles.familyName, { color: colors.comment }]}
+                      >
+                        Enter a family
+                      </Text>
+                    </TouchableOpacity>
+                  </>
                 )}
               />
             </View>
