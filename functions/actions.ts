@@ -90,7 +90,7 @@ export async function UpdateUser(email: string, data: any) {
 
 export async function CreateFamily(data: any) {
   try {
-    await set(ref(getDatabase(), 'family/' + data.id), data)
+    await set(ref(getDatabase(), `family/${data.id}`), data)
   } catch (error) {
     console.log('CreateFamily', error)
   }
@@ -98,8 +98,26 @@ export async function CreateFamily(data: any) {
 
 export async function UpdateFamily(data: any) {
   try {
-    update(ref(getDatabase(), 'family/' + data.id), data)
+    update(ref(getDatabase(), `family/${data.id}`), data)
   } catch (error) {
     console.log('UpdateFamily', error)
+  }
+}
+
+// FOLDER
+
+export async function CreateFolder(familyId: string, data: any) {
+  try {
+    await set(ref(getDatabase(), `family/${familyId}/folder/${data.id}`), data)
+  } catch (error) {
+    console.log('CreateFolder', error)
+  }
+}
+
+export async function UpdateFolder(familyId: string, data: any) {
+  try {
+    update(ref(getDatabase(), `family/${familyId}/folder/${data.id}`), data)
+  } catch (error) {
+    console.log('UpdateFolder', error)
   }
 }

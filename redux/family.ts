@@ -7,6 +7,7 @@ const initialState: Family = {
   users: [],
   admin: '',
   password: '',
+  folder: [],
 }
 
 const familySlice = createSlice({

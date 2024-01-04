@@ -1,5 +1,6 @@
 import {
   Dimensions,
+  FlatList,
   Modal,
   StyleSheet,
   Text,
@@ -28,6 +29,14 @@ export default function MainScreen({ navigation }: any) {
   const user: User = useSelector((state: RootState) => state.user)
   const family: Family = useSelector((state: RootState) => state.family)
 
+  function RenderFolderItem({ item }: any) {
+    return (
+      <View style={styles.card}>
+        <Text>{item.name}</Text>
+      </View>
+    )
+  }
+
   return (
     <View style={styles.container}>
       <BGCircles />
@@ -44,6 +53,27 @@ export default function MainScreen({ navigation }: any) {
           action={() => navigation.navigate('CreateFamilyScreen')}
         />
       )}
+      <View style={styles.rowBetween}>
+        <Text style={styles.addFolderText}>Family folders:</Text>
+        <TouchableOpacity
+          style={styles.addFolderButton}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('CreateFolderScreen')}
+        >
+          <Ionicons name="add" size={width * 0.06} color={colors.text} />
+          <Text style={styles.addFolderText}>create folder</Text>
+        </TouchableOpacity>
+      </View>
+      {Object.values(family?.folder)?.length ? (
+        <FlatList
+          style={{ width: '100%' }}
+          numColumns={2}
+          data={Object.values(family.folder)}
+          renderItem={RenderFolderItem}
+        />
+      ) : (
+        <></>
+      )}
     </View>
   )
 }
@@ -56,9 +86,33 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   rowBetween: {
-    width: '100%',
+    width: '92%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  addFolderButton: {
+    backgroundColor: colors.card,
+    borderRadius: 100,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: width * 0.02,
+    padding: width * 0.01,
+  },
+  addFolderText: {
+    fontSize: width * 0.05,
+  },
+  card: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '48%',
+    padding: '4%',
+    borderRadius: width * 0.03,
+    backgroundColor: colors.card,
+    marginTop: width * 0.03,
+    alignSelf: 'center',
   },
 })

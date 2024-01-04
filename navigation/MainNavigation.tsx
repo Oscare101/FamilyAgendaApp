@@ -14,6 +14,7 @@ import ChatScreen from '../screens/application/ChatScreen'
 import FamilyScreen from '../screens/application/FamilyScreen'
 import SettingsScreen from '../screens/application/SettingsScreen'
 import EnterFamilyScreen from '../screens/application/EnterFamilyScreen'
+import CreateFolderScreen from '../screens/application/CreateFolderScreen'
 
 const Stack = createStackNavigator()
 
@@ -127,6 +128,18 @@ export default function MainNavigation() {
         }}
         name="SettingsScreen"
         component={SettingsScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerLeft: () => null,
+          animationEnabled: true,
+          gestureDirection: 'horizontal',
+          gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        name="CreateFolderScreen"
+        component={CreateFolderScreen}
       />
     </Stack.Navigator>
   )
