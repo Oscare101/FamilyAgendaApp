@@ -20,6 +20,7 @@ export default function Button(props: ButtonProps) {
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={props.action}
+      disabled={props.disable}
       style={{
         width: '92%',
         height: width * 0.15,

@@ -1,7 +1,18 @@
+export interface Task {
+  title: string
+  id: string
+  created: string
+  author: string
+  doneBy: string
+  doneTime: string
+}
+
 export interface Folder {
   name: string
   id: string
-  data: any[]
+  task: any[]
+  icon: string
+  color: string
 }
 
 export interface Family {

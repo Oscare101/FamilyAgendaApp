@@ -29,11 +29,46 @@ export default function MainScreen({ navigation }: any) {
   const user: User = useSelector((state: RootState) => state.user)
   const family: Family = useSelector((state: RootState) => state.family)
 
-  function RenderFolderItem({ item }: any) {
+  function RenderFolderItem({ item, index }: any) {
     return (
-      <View style={styles.card}>
-        <Text>{item.name}</Text>
-      </View>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() =>
+          navigation.navigate('FolderScreen', { folderId: item.id })
+        }
+        style={[styles.card, { marginRight: index % 2 === 0 ? '4%' : '0%' }]}
+      >
+        <View style={styles.cardRowBetween}>
+          <View
+            style={{
+              width: width * 0.15,
+              height: width * 0.15,
+              borderRadius: width * 0.15,
+              backgroundColor: item.color,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Text style={{ fontSize: width * 0.07, color: colors.text }}>
+              {item.data?.length || 0}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'column',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-start',
+              height: '100%',
+            }}
+          >
+            <Text>last update:{'\n'}-</Text>
+            <Ionicons name={item.icon} size={width * 0.1} color={colors.text} />
+          </View>
+        </View>
+        <Text numberOfLines={1} style={styles.cardTitle}>
+          {item.name}
+        </Text>
+      </TouchableOpacity>
     )
   }
 
@@ -64,9 +99,9 @@ export default function MainScreen({ navigation }: any) {
           <Text style={styles.addFolderText}>create folder</Text>
         </TouchableOpacity>
       </View>
-      {Object.values(family?.folder)?.length ? (
+      {family?.folder && Object.values(family?.folder)?.length ? (
         <FlatList
-          style={{ width: '100%' }}
+          style={{ width: '92%' }}
           numColumns={2}
           data={Object.values(family.folder)}
           renderItem={RenderFolderItem}
@@ -102,11 +137,11 @@ const styles = StyleSheet.create({
     padding: width * 0.01,
   },
   addFolderText: {
-    fontSize: width * 0.05,
+    fontSize: width * 0.04,
   },
   card: {
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'flex-start',
     width: '48%',
     padding: '4%',
@@ -114,5 +149,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.card,
     marginTop: width * 0.03,
     alignSelf: 'center',
+  },
+  cardRowBetween: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  cardTitle: {
+    fontSize: width * 0.05,
+    color: colors.text,
+    // width: '100%',
+    textAlign: 'right',
+    flex: 1,
   },
 })

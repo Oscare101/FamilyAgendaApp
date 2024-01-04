@@ -18,14 +18,21 @@ import {
 } from '@gorhom/bottom-sheet'
 import { useMemo, useRef, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
+import IconColorBlockModal from './IconColorBlockModal'
 
 const width = Dimensions.get('screen').width
 
 export default function BottomModalBlock(props: any) {
-  // const contentData: any = {
-  //   themeBlock: <ThemeBlockModal />,
-
-  // }
+  const contentData: any = {
+    iconColorBlock: (
+      <IconColorBlockModal
+        setIcon={(value: string) => props.setIcon(value)}
+        setColor={(value: string) => props.setColor(value)}
+        icon={props.icon}
+        color={props.color}
+      />
+    ),
+  }
 
   function RenderFamilyItem({ item }: any) {
     return (
@@ -72,8 +79,7 @@ export default function BottomModalBlock(props: any) {
           borderColor: colors.text,
         }}
       >
-        {/* <FlatList data={props.data} renderItem={RenderFamilyItem} /> */}
-        {/* {props.content} */}
+        {contentData[props.content]}
       </View>
     </BottomSheetModal>
   )

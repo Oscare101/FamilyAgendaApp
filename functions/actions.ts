@@ -16,6 +16,7 @@ import {
 } from 'firebase/database'
 import { ref as refStorage, deleteObject } from 'firebase/storage'
 import { NewUser } from './function'
+import { Task } from '../constants/interfaces'
 
 // REGISTRATION LOGIN LOGOUT
 
@@ -119,5 +120,43 @@ export async function UpdateFolder(familyId: string, data: any) {
     update(ref(getDatabase(), `family/${familyId}/folder/${data.id}`), data)
   } catch (error) {
     console.log('UpdateFolder', error)
+  }
+}
+
+// TASKS
+
+export async function CreateTask(
+  familyId: string,
+  folderId: string,
+  data: Task
+) {
+  try {
+    await set(
+      ref(
+        getDatabase(),
+        `family/${familyId}/folder/${folderId}/task/${data.id}`
+      ),
+      data
+    )
+  } catch (error) {
+    console.log('CreateTask', error)
+  }
+}
+
+export async function UpdateTask(
+  familyId: string,
+  folderId: string,
+  data: Task
+) {
+  try {
+    update(
+      ref(
+        getDatabase(),
+        `family/${familyId}/folder/${folderId}/task/${data.id}`
+      ),
+      data
+    )
+  } catch (error) {
+    console.log('UpdateTask', error)
   }
 }
