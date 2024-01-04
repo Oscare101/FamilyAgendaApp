@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux'
 import { useState } from 'react'
 import { auth } from '../firebase'
 import { getDatabase, onValue, ref } from 'firebase/database'
+import { UpdateUser } from '../functions/actions'
 
 const width = Dimensions.get('screen').width
 
@@ -24,26 +25,36 @@ export default function ProfileHeader({ navigation }: any) {
   const user: User = useSelector((state: RootState) => state.user)
 
   const [modal, setModal] = useState<boolean>(false)
-  const [families, setfamilies] = useState<any[]>([])
+  const [families, setFamilies] = useState<any[]>([])
 
   async function GetUserFamilies() {
     if (auth.currentUser && auth.currentUser.email) {
       const data = ref(getDatabase(), `family/`)
       onValue(data, (snapshot) => {
-        setfamilies(
+        setFamilies(
           Object.values(snapshot.val()).filter((f: any) =>
             f.users.includes(auth.currentUser!.email?.replace('.', ','))
           )
         )
-
-        // dispatch(updateFamily(snapshot.val() as Family))
       })
+    }
+  }
+
+  async function SetCurrentFamily(id: string) {
+    const data = {
+      currentFamilyId: id,
+    }
+    if (auth.currentUser && auth.currentUser.email) {
+      await UpdateUser(auth.currentUser.email, data)
+      setModal(false)
     }
   }
 
   function RenderFamilyItem({ item }: any) {
     return (
       <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => SetCurrentFamily(item.id)}
         style={[
           styles.familyItemButton,
           { borderBottomWidth: 1, borderBottomColor: colors.line },
@@ -54,7 +65,9 @@ export default function ProfileHeader({ navigation }: any) {
           size={width * 0.05}
           color={colors.comment}
         />
-        <Text style={styles.familyName}>{item.name}</Text>
+        <Text numberOfLines={1} style={styles.familyName}>
+          {item.name}
+        </Text>
       </TouchableOpacity>
     )
   }
@@ -70,7 +83,9 @@ export default function ProfileHeader({ navigation }: any) {
             setModal(true)
           }}
         >
-          <Text style={styles.title}>{family.name}</Text>
+          <Text numberOfLines={1} style={styles.title}>
+            {family.name}
+          </Text>
           <Ionicons
             name="caret-down-outline"
             size={width * 0.07}
@@ -80,7 +95,9 @@ export default function ProfileHeader({ navigation }: any) {
 
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => {}}
+          onPress={() => {
+            navigation.navigate('SettingsScreen')
+          }}
           style={styles.button}
         >
           <Ionicons
@@ -154,6 +171,7 @@ const styles = StyleSheet.create({
     fontSize: width * 0.07,
     color: colors.text,
     marginRight: width * 0.02,
+    // flex: 1,
   },
   // MODAL
   modal: {
@@ -167,7 +185,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#00000060',
   },
   modalBlock: {
-    width: width * 0.6,
+    width: width * 0.7,
     backgroundColor: colors.card,
     elevation: 5,
     borderRadius: width * 0.03,

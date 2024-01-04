@@ -5,7 +5,7 @@ export default {
   comment: '#8B8B8A',
   line: '#25252550',
   active: '#B5D4CA',
-
+  activeText: '#1FA67B',
   successText: '#51AB32',
   successBG: '#CBE6C2',
   warningText: '#CEBA00',

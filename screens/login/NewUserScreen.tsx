@@ -18,8 +18,8 @@ import { auth } from '../../firebase'
 import Header from '../../components/Header'
 const width = Dimensions.get('screen').width
 
-export default function NewUserScreen({ navigation }: any) {
-  const [name, setName] = useState<string>('')
+export default function NewUserScreen({ navigation, route }: any) {
+  const [name, setName] = useState<string>(route.params?.user?.name || '')
   const [loading, setLoading] = useState<boolean>(false)
 
   async function UpdateUserFunc() {
@@ -29,10 +29,14 @@ export default function NewUserScreen({ navigation }: any) {
     }
     if (auth.currentUser && auth.currentUser.email) {
       await UpdateUser(auth.currentUser.email, data)
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'MainScreen' }],
-      })
+      if (route.params?.user?.name) {
+        navigation.goBack()
+      } else {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'MainScreen' }],
+        })
+      }
     }
   }
 
@@ -42,7 +46,9 @@ export default function NewUserScreen({ navigation }: any) {
       <Header title="" action={() => navigation.goBack()} />
 
       <View style={styles.column}>
-        <Text style={styles.title}>New account</Text>
+        <Text style={styles.title}>
+          {route.params?.user?.name ? 'Edit Name' : 'New account'}
+        </Text>
         <View style={{ width: '100%', alignItems: 'center' }}>
           <InputTextBlock
             icon="person-outline"
@@ -54,7 +60,7 @@ export default function NewUserScreen({ navigation }: any) {
           />
 
           <Button
-            title="Creat account"
+            title={route.params?.user?.name ? 'Edit' : 'Create account'}
             disable={!(name && !loading)}
             action={UpdateUserFunc}
           />
