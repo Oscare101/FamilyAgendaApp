@@ -35,8 +35,6 @@ export default function BottomModalBlock(props: any) {
     ),
     taskBlock: (
       <TaskBlockModal
-        setTitle={(value: string) => props.setTitle(value)}
-        title={props.title}
         familyId={props.familyId}
         folderId={props.folderId}
         dismiss={props.dismiss}

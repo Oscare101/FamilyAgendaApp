@@ -164,14 +164,11 @@ export async function UpdateTask(
 export async function DeleteTask(
   familyId: string,
   folderId: string,
-  data: Task
+  taskId: string
 ) {
   try {
     await remove(
-      ref(
-        getDatabase(),
-        `family/${familyId}/folder/${folderId}/task/${data.id}`
-      )
+      ref(getDatabase(), `family/${familyId}/folder/${folderId}/task/${taskId}`)
     )
   } catch (error) {
     console.log('DeleteTask', error)

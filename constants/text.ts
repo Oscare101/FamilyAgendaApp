@@ -6,6 +6,10 @@ const text: any = {
     UrgentTask: 'Термінова задача',
     LastUpdate: 'Оновлене',
     Yesterday: 'Вчора',
+    Cancel: 'Скасувати',
+    Delete: 'Видалити',
+    DeleteTask: 'Видалити задачу',
+    DoYouWantToDelete: 'Ви хочете видалити задачу',
   },
 }
 

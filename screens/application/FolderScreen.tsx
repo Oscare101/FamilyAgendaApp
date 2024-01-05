@@ -1,11 +1,8 @@
 import {
   Dimensions,
   FlatList,
-  Keyboard,
   StyleSheet,
-  Switch,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native'
@@ -21,18 +18,17 @@ import {
 } from '@gorhom/bottom-sheet'
 import { useMemo, useRef, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
-import InputTextBlock from '../../components/InputTextBlock'
 import Button from '../../components/Button'
-import { CreateTask, UpdateTask } from '../../functions/actions'
+import { CreateTask, DeleteTask, UpdateTask } from '../../functions/actions'
 import { auth } from '../../firebase'
 import BottomModalBlock from '../../components/BottomModalBlock'
-import {
-  GetDateTime,
-  GetLastUpdated,
-  GetSortedTasks,
-} from '../../functions/function'
+import { GetLastUpdated, GetSortedTasks } from '../../functions/function'
 import { Swipeable } from 'react-native-gesture-handler'
 import Animated from 'react-native-reanimated'
+import text from '../../constants/text'
+import DeleteTaskModal from '../../components/DeleteTaskModal'
+import SwipeTaskRight from '../../components/SwipeTaskRight'
+import SwipeTaskLeft from '../../components/SwipeTaskLeft'
 
 const width = Dimensions.get('screen').width
 
@@ -41,8 +37,7 @@ export default function FolderScreen({ navigation, route }: any) {
   const user: User = useSelector((state: RootState) => state.user)
   const family: Family = useSelector((state: RootState) => state.family)
 
-  const [title, setTitle] = useState<string>('')
-  const [loading, setLoading] = useState<boolean>(false)
+  const [modal, setModal] = useState<any>(null)
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const snapPoints = useMemo(() => ['100%'], []) // TODO
@@ -60,6 +55,14 @@ export default function FolderScreen({ navigation, route }: any) {
     prevOpenedRow = row[index]
   }
 
+  function CloseSwipeables() {
+    row.forEach((swipeable) => {
+      if (swipeable && swipeable.close) {
+        swipeable.close()
+      }
+    })
+  }
+
   function ToggleTaskFunc(item: any) {
     if (auth.currentUser && auth.currentUser.email) {
       const togglesTask = {
@@ -69,101 +72,22 @@ export default function FolderScreen({ navigation, route }: any) {
       }
 
       UpdateTask(family.id, route.params.folderId, togglesTask)
-      row.forEach((swipeable) => {
-        if (swipeable && swipeable.close) {
-          swipeable.close()
-        }
-      })
+      CloseSwipeables()
     }
   }
 
-  function DeleteTaskFunc(item: any) {
+  function DeleteTaskFunc(id: any) {
     if (auth.currentUser && auth.currentUser.email) {
-      // DeleteTODO(auth.currentUser.email, item.id)
+      DeleteTask(family.id, route.params.folderId, id)
+      CloseSwipeables()
     }
-  }
-
-  const swipeRrenderRightActions = (item: any) => {
-    return (
-      <View
-        style={{
-          backgroundColor: colors.errorBG,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          width: '92%',
-          height: '100%',
-          borderRadius: 8,
-          marginRight: '4%',
-          paddingHorizontal: '4%',
-        }}
-      >
-        <Ionicons
-          name="chevron-back"
-          size={width * 0.05}
-          color={colors.errorText}
-        />
-        <Ionicons
-          name="chevron-back"
-          size={width * 0.05}
-          color={colors.errorText}
-        />
-        <Ionicons
-          name="chevron-back"
-          size={width * 0.05}
-          color={colors.errorText}
-        />
-        <Ionicons
-          name="trash-bin-outline"
-          size={width * 0.07}
-          color={colors.errorText}
-        />
-      </View>
-    )
-  }
-
-  const swipeRenderLeftActions = (item: any) => {
-    return (
-      <View
-        style={{
-          backgroundColor: colors.successBG,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          width: '92%',
-          height: '100%',
-          borderRadius: 8,
-          marginLeft: '4%',
-          paddingHorizontal: '4%',
-        }}
-      >
-        <Ionicons
-          name={item.doneBy ? 'square-outline' : 'ios-checkbox-outline'}
-          size={width * 0.07}
-          color={colors.successText}
-        />
-        <Ionicons
-          name="chevron-forward"
-          size={width * 0.05}
-          color={colors.successText}
-        />
-        <Ionicons
-          name="chevron-forward"
-          size={width * 0.05}
-          color={colors.successText}
-        />
-        <Ionicons
-          name="chevron-forward"
-          size={width * 0.05}
-          color={colors.successText}
-        />
-      </View>
-    )
   }
 
   function RenderTask({ item, index }: any) {
     return (
-      <View
+      <TouchableOpacity
+        activeOpacity={0.8}
+        // onPress={()=>navigation.navigate('TaskInfoScreen')}
         style={{
           width: '100%',
           alignSelf: 'center',
@@ -174,8 +98,8 @@ export default function FolderScreen({ navigation, route }: any) {
       >
         <Swipeable
           ref={(ref) => (row[index] = ref)}
-          renderRightActions={() => swipeRrenderRightActions(item)}
-          renderLeftActions={() => swipeRenderLeftActions(item)}
+          renderRightActions={() => SwipeTaskRight(item)}
+          renderLeftActions={() => SwipeTaskLeft(item)}
           overshootLeft={true}
           overshootRight={true}
           overshootFriction={0.2}
@@ -189,16 +113,10 @@ export default function FolderScreen({ navigation, route }: any) {
             if (direction === 'left') {
               ToggleTaskFunc(item)
             } else {
-              DeleteTaskFunc(item)
+              setModal(item)
+              // DeleteTaskFunc(item)
             }
           }}
-          // onSwipeableWillOpen={(event:any, gestureState:any, swipeable:any) => {
-          //   if (gestureState.dx > 0) {
-          //     ToggleTODOFunc(item)
-          //   } else {
-          //     DeleteTODOFunc(item)
-          //   }
-          // }}
         >
           <Animated.View style={styles.card}>
             <Text
@@ -251,47 +169,9 @@ export default function FolderScreen({ navigation, route }: any) {
             )}
           </Animated.View>
         </Swipeable>
-      </View>
+      </TouchableOpacity>
     )
   }
-
-  // function RenderTask({ item }: any) {
-  //   return (
-  //     <View style={styles.card}>
-  //       <Text style={styles.taskTitle}>{item.title}</Text>
-  //       <View
-  //         style={{
-  //           flexDirection: 'row',
-  //           alignItems: 'center',
-  //           justifyContent: 'flex-end',
-  //         }}
-  //       >
-  //         <Text style={{ fontWeight: '300', fontSize: width * 0.03 }}>
-  //           {GetLastUpdated(item.created, language)}
-  //         </Text>
-  //       </View>
-  //       {item.urgent ? (
-  //         <View
-  //           style={{
-  //             width: width * 0.05,
-  //             height: width * 0.05,
-  //             borderRadius: width * 0.05,
-  //             backgroundColor: colors.errorText,
-  //             alignItems: 'center',
-  //             justifyContent: 'center',
-  //             position: 'absolute',
-  //             top: width * 0.01,
-  //             right: width * 0.01,
-  //           }}
-  //         >
-  //           <Ionicons name="alert" size={width * 0.03} color={colors.card} />
-  //         </View>
-  //       ) : (
-  //         <></>
-  //       )}
-  //     </View>
-  //   )
-  // }
 
   return (
     <BottomSheetModalProvider>
@@ -303,27 +183,6 @@ export default function FolderScreen({ navigation, route }: any) {
             navigation.goBack()
           }}
         />
-
-        {/* <InputTextBlock
-          value={title}
-          setValue={(value: string) => setTitle(value)}
-          icon="text-outline"
-          type="text"
-        />
-        <Button
-          title="Add"
-          disable={!(title && !loading)}
-          action={CreateTaskFunc}
-        /> */}
-        {/* <View style={styles.rowBetween}> */}
-        {/* <Button
-            title="Add"
-            disable={false}
-            action={() => {
-              // bottomSheetModalRef.current?.present()
-            }}
-            style={{ width: '49%' }}
-          /> */}
         <Button
           title="Add"
           disable={false}
@@ -345,13 +204,24 @@ export default function FolderScreen({ navigation, route }: any) {
           <></>
         )}
       </View>
+      {/* MODAL */}
+      <DeleteTaskModal
+        modal={modal}
+        onClose={() => {
+          setModal(null)
+          CloseSwipeables()
+        }}
+        onDelete={() => {
+          DeleteTaskFunc(modal.id)
+          setModal(null)
+        }}
+      />
+      {/* BOTTOM */}
       <BottomModalBlock
         bottomSheetModalRef={bottomSheetModalRef}
         snapPoints={snapPoints}
         dismiss={() => bottomSheetModalRef.current?.dismiss()}
         content={'taskBlock'}
-        setTitle={(value: string) => setTitle(value)}
-        title={setTitle}
         familyId={family.id}
         folderId={route.params.folderId}
       />
