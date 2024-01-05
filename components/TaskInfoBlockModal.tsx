@@ -16,59 +16,76 @@ import {
 } from 'react-native-gesture-handler'
 import { Ionicons } from '@expo/vector-icons'
 import InputTextBlock from './InputTextBlock'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import text from '../constants/text'
 import { Family, Task } from '../constants/interfaces'
 import { auth } from '../firebase'
-import { CreateTask, UpdateTask } from '../functions/actions'
+import { CreateTask } from '../functions/actions'
+import family from '../redux/family'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux'
+import { getDatabase, onValue, ref } from 'firebase/database'
+import { GetDateTime } from '../functions/function'
 
 const width = Dimensions.get('screen').width
 
-export default function TaskBlockModal(props: any) {
+export default function TaskInfoBlockModal(props: any) {
   const language = 'UA'
-  const family: Family = useSelector((state: RootState) => state.family)
-  const [title, setTitle] = useState<string>(
-    props.taskId ? family.folder[props.folderId].task[props.taskId].title : ''
-  )
-  const [urgent, setUrgent] = useState<boolean>(
-    props.taskId
-      ? family.folder[props.folderId].task[props.taskId].urgent
-      : false
-  )
-  const [loading, setLoading] = useState<boolean>(false)
+  const family: any = useSelector((state: RootState) => state.family)
 
-  async function CreateTaskFunc() {
-    Keyboard.dismiss()
-    setLoading(true)
+  const [users, setUsers] = useState<any>({})
+
+  const data = [
+    {
+      title: 'Urgent',
+      value: family.folder[props.folderId].task[props.taskId].urgent
+        ? 'yes'
+        : 'no',
+    },
+    {
+      title: 'Author',
+      value:
+        users[
+          family.folder[props.folderId].task[props.taskId].author.replace(
+            '.',
+            ','
+          )
+        ]?.name,
+    },
+    {
+      title: 'Created',
+      value: `${
+        GetDateTime(family.folder[props.folderId].task[props.taskId].created)
+          .time
+      }   ${
+        GetDateTime(family.folder[props.folderId].task[props.taskId].created)
+          .date
+      }`,
+    },
+  ]
+
+  async function GetUsers() {
     if (auth.currentUser && auth.currentUser.email) {
-      const newTask: Task = {
-        title: title,
-        id: new Date().getTime().toString(),
-        author: auth.currentUser.email,
-        created: new Date().getTime().toString(),
-        doneTime: '',
-        doneBy: '',
-        urgent: urgent,
-      }
-      await CreateTask(props.familyId, props.folderId, newTask)
-      props.dismiss()
+      const data = ref(getDatabase(), `user/`)
+      onValue(data, (snapshot) => {
+        setUsers(snapshot.val())
+      })
     }
   }
 
-  async function UpdateTaskFunc() {
-    Keyboard.dismiss()
-    setLoading(true)
-    if (auth.currentUser && auth.currentUser.email) {
-      const newTask: Task = {
-        ...family.folder[props.folderId].task[props.taskId],
-        title: title,
-        urgent: urgent,
-      }
-      await UpdateTask(props.familyId, props.folderId, newTask)
-      props.dismiss()
-    }
+  useEffect(() => {
+    GetUsers()
+  }, [])
+
+  function RenderTaskStat({ item }: any) {
+    return (
+      <View style={styles.rowBetween}>
+        <Text style={{ fontSize: width * 0.05 }}>{item.title}</Text>
+        <Text style={{ fontSize: width * 0.05, textAlign: 'right' }}>
+          {item.value}
+        </Text>
+      </View>
+    )
   }
 
   return (
@@ -77,7 +94,7 @@ export default function TaskBlockModal(props: any) {
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-end',
           width: '100%',
           borderBottomWidth: 1,
           // borderBlockColor: colors[themeColor].comment,
@@ -88,28 +105,8 @@ export default function TaskBlockModal(props: any) {
       >
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => {
-            if (props.taskId) {
-              props.onBack()
-            } else {
-              setTitle('')
-            }
-          }}
-        >
-          <Text style={{ fontSize: width * 0.05, color: colors.errorText }}>
-            {props.taskId ? text[language].Back : text[language].Clear}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          disabled={!(title && !loading)}
-          onPress={() => {
-            if (props.taskId) {
-              UpdateTaskFunc()
-            } else {
-              CreateTaskFunc()
-            }
-          }}
+          disabled={false}
+          onPress={props.onEdit}
           style={{
             backgroundColor: colors.text,
             height: width * 0.08,
@@ -117,11 +114,11 @@ export default function TaskBlockModal(props: any) {
             justifyContent: 'center',
             paddingHorizontal: width * 0.03,
             borderRadius: width * 0.02,
-            opacity: !(title && !loading) ? 0.3 : 1,
+            opacity: 1,
           }}
         >
           <Text style={{ fontSize: width * 0.05, color: colors.card }}>
-            {props.taskId ? text[language].Edit : text[language].Save}
+            {text[language].Edit}
           </Text>
         </TouchableOpacity>
       </View>
@@ -135,18 +132,37 @@ export default function TaskBlockModal(props: any) {
           justifyContent: 'flex-start',
         }}
       >
-        <InputTextBlock
-          value={title}
-          setValue={(value: string) => setTitle(value)}
-          icon=""
-          type={text[language].Title}
-          style={{ borderWidth: 1, borderColor: colors.comment }}
-        />
-        <View style={styles.rowBetween}>
+        <View
+          style={{
+            width: '92%',
+            height: width * 0.15,
+            backgroundColor: colors.card,
+            borderRadius: width * 0.05,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingHorizontal: '4%',
+            marginTop: width * 0.05,
+            borderWidth: 1,
+            borderColor: colors.comment,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: width * 0.06,
+              flex: 1,
+              textAlign: 'left',
+              marginLeft: props.icon ? '4%' : '0%',
+              color: colors.text,
+            }}
+          >
+            {family.folder[props.folderId].task[props.taskId].title}
+          </Text>
+        </View>
+        {/* <View style={styles.rowBetween}>
           <Text style={{ fontSize: width * 0.05, color: colors.text }}>
             {text[language].UrgentTask}
           </Text>
-          {/* <Text style={{ fontSize: width * 0.05, color: colors.text }}>1</Text> */}
           <Switch
             style={{ transform: [{ scale: 1.2 }] }}
             trackColor={{
@@ -158,7 +174,7 @@ export default function TaskBlockModal(props: any) {
             onValueChange={() => setUrgent(!urgent)}
             value={urgent}
           />
-        </View>
+        </View> */}
         {/* <View style={{ flexDirection: 'row' }}>
           <FlatList
             style={{ width: '100%' }}
@@ -167,16 +183,17 @@ export default function TaskBlockModal(props: any) {
             data={colorData}
             renderItem={RenderColorItem}
           />
-        </View>
-        <ScrollView style={{ flex: 1, width: '100%' }}>
+        </View>*/}
+        {Object.values(users).length ? (
           <FlatList
             style={{ width: '100%' }}
             scrollEnabled={false}
-            numColumns={5}
-            data={iconData}
-            renderItem={RenderIconItem}
+            data={data}
+            renderItem={RenderTaskStat}
           />
-        </ScrollView> */}
+        ) : (
+          <></>
+        )}
       </TouchableWithoutFeedback>
     </>
   )

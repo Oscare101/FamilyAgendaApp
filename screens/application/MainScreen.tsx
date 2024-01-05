@@ -69,7 +69,9 @@ export default function MainScreen({ navigation }: any) {
             }}
           >
             <Text style={{ fontSize: width * 0.07, color: colors.text }}>
-              {item.task ? Object.values(item.task).length : 0}
+              {item.task
+                ? Object.values(item.task).filter((t: any) => !t.doneBy).length
+                : 0}
             </Text>
             {urgent ? (
               <View

@@ -20,6 +20,7 @@ import { useMemo, useRef, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import IconColorBlockModal from './IconColorBlockModal'
 import TaskBlockModal from './TaskBlockModal'
+import TaskInfoBlockModal from './TaskInfoBlockModal'
 
 const width = Dimensions.get('screen').width
 
@@ -38,16 +39,19 @@ export default function BottomModalBlock(props: any) {
         familyId={props.familyId}
         folderId={props.folderId}
         dismiss={props.dismiss}
+        taskId={props.taskId}
+        onBack={props.onBack}
       />
     ),
-  }
-
-  function RenderFamilyItem({ item }: any) {
-    return (
-      <TouchableOpacity>
-        <Text>{item.name}</Text>
-      </TouchableOpacity>
-    )
+    taskInfoBlock: (
+      <TaskInfoBlockModal
+        familyId={props.familyId}
+        folderId={props.folderId}
+        taskId={props.taskId}
+        dismiss={props.dismiss}
+        onEdit={props.onEdit}
+      />
+    ),
   }
 
   return (

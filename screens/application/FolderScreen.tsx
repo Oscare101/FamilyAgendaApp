@@ -39,6 +39,10 @@ export default function FolderScreen({ navigation, route }: any) {
 
   const [modal, setModal] = useState<any>(null)
 
+  const [taskId, setTaskId] = useState<string>('')
+
+  const [bottomSheetContent, setBottomSheetContent] =
+    useState<string>('taskBlock')
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const snapPoints = useMemo(() => ['100%'], []) // TODO
 
@@ -87,7 +91,12 @@ export default function FolderScreen({ navigation, route }: any) {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        // onPress={()=>navigation.navigate('TaskInfoScreen')}
+        onPress={() => {
+          setTaskId(item.id)
+          setBottomSheetContent('taskInfoBlock')
+          bottomSheetModalRef.current?.present()
+          // navigation.navigate('TaskInfoScreen', { taskId: item.id })
+        }}
         style={{
           width: '100%',
           alignSelf: 'center',
@@ -187,6 +196,8 @@ export default function FolderScreen({ navigation, route }: any) {
           title="Add"
           disable={false}
           action={() => {
+            setTaskId('')
+            setBottomSheetContent('taskBlock')
             bottomSheetModalRef.current?.present()
           }}
           // style={{ width: '49%' }}
@@ -221,9 +232,12 @@ export default function FolderScreen({ navigation, route }: any) {
         bottomSheetModalRef={bottomSheetModalRef}
         snapPoints={snapPoints}
         dismiss={() => bottomSheetModalRef.current?.dismiss()}
-        content={'taskBlock'}
+        content={bottomSheetContent}
         familyId={family.id}
+        taskId={taskId}
         folderId={route.params.folderId}
+        onEdit={() => setBottomSheetContent('taskBlock')}
+        onBack={() => setBottomSheetContent('taskInfoBlock')}
       />
     </BottomSheetModalProvider>
   )

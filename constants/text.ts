@@ -10,6 +10,8 @@ const text: any = {
     Delete: 'Видалити',
     DeleteTask: 'Видалити задачу',
     DoYouWantToDelete: 'Ви хочете видалити задачу',
+    Edit: 'Редагувати',
+    Back: 'Назад',
   },
 }
 
