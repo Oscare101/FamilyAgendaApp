@@ -160,3 +160,20 @@ export async function UpdateTask(
     console.log('UpdateTask', error)
   }
 }
+
+export async function DeleteTask(
+  familyId: string,
+  folderId: string,
+  data: Task
+) {
+  try {
+    await remove(
+      ref(
+        getDatabase(),
+        `family/${familyId}/folder/${folderId}/task/${data.id}`
+      )
+    )
+  } catch (error) {
+    console.log('DeleteTask', error)
+  }
+}

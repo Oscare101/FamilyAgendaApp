@@ -10,6 +10,6 @@ export default {
   successBG: '#CBE6C2',
   warningText: '#CEBA00',
   warningBG: '#F1EBB3',
-  errorText: '#B82C2C',
+  errorText: '#EB4A4A',
   errorBG: '#EAC0C0',
 }

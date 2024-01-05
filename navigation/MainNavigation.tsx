@@ -154,6 +154,18 @@ export default function MainNavigation() {
         name="FolderScreen"
         component={FolderScreen}
       />
+      {/* <Stack.Screen
+        options={{
+          headerShown: false,
+          headerLeft: () => null,
+          animationEnabled: true,
+          gestureDirection: 'vertical',
+          // gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+        }}
+        name="FolderScreen"
+        component={FolderScreen}
+      /> */}
     </Stack.Navigator>
   )
 

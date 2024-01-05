@@ -23,10 +23,12 @@ import MainUserCircles from '../../components/MainUserCircles'
 import BottomModalBlock from '../../components/BottomModalBlock'
 import { Ionicons } from '@expo/vector-icons'
 import { GetDateTime, GetLastUpdated } from '../../functions/function'
+import text from '../../constants/text'
 
 const width = Dimensions.get('screen').width
 
 export default function MainScreen({ navigation }: any) {
+  const language = 'UA'
   const user: User = useSelector((state: RootState) => state.user)
   const family: Family = useSelector((state: RootState) => state.family)
 
@@ -37,9 +39,15 @@ export default function MainScreen({ navigation }: any) {
         )[0].created
       : 0
 
-    const lastUpdated = family.folder[item.id]?.task
-      ? GetLastUpdated(lastAction)
+    const lastUpdated: string = family.folder[item.id]?.task
+      ? GetLastUpdated(lastAction, language)
       : '-'
+
+    const urgent = family.folder[item.id]?.task
+      ? Object.values(family.folder[item.id].task).find(
+          (t: Task) => t.urgent && !t.doneBy
+        )
+      : false
 
     return (
       <TouchableOpacity
@@ -61,8 +69,33 @@ export default function MainScreen({ navigation }: any) {
             }}
           >
             <Text style={{ fontSize: width * 0.07, color: colors.text }}>
-              {item.data?.length || 0}
+              {item.task ? Object.values(item.task).length : 0}
             </Text>
+            {urgent ? (
+              <View
+                style={{
+                  width: width * 0.055,
+                  height: width * 0.055,
+                  borderRadius: width * 0.05,
+                  backgroundColor: colors.errorText,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  borderWidth: width * 0.005,
+                  borderColor: colors.card,
+                }}
+              >
+                <Ionicons
+                  name="alert"
+                  size={width * 0.03}
+                  color={colors.card}
+                />
+              </View>
+            ) : (
+              <></>
+            )}
           </View>
           <View
             style={{
@@ -72,9 +105,18 @@ export default function MainScreen({ navigation }: any) {
               height: '100%',
             }}
           >
-            <Text>
-              last update:{'\n'}
-              {lastUpdated}
+            <Text
+              style={{
+                textAlign: 'right',
+                color: colors.text,
+                opacity: 0.7,
+                fontWeight: '300',
+                fontSize: width * 0.03,
+              }}
+            >
+              {text[language].LastUpdate}
+              {'\n'}
+              {lastUpdated.toLocaleLowerCase()}
             </Text>
             <Ionicons name={item.icon} size={width * 0.1} color={colors.text} />
           </View>
@@ -167,7 +209,7 @@ const styles = StyleSheet.create({
   cardRowBetween: {
     width: '100%',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
   },
   cardTitle: {

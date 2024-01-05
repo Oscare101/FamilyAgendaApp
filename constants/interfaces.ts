@@ -5,6 +5,7 @@ export interface Task {
   author: string
   doneBy: string
   doneTime: string
+  urgent: boolean
 }
 
 export interface Folder {
