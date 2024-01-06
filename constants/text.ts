@@ -12,6 +12,11 @@ const text: any = {
     DoYouWantToDelete: 'Ви хочете видалити задачу',
     Edit: 'Редагувати',
     Back: 'Назад',
+    Task: 'Задача',
+    Urgent: 'Термінова',
+    Regular: 'Звичайна',
+    Author: 'Автор',
+    Created: 'Створена',
   },
 }
 

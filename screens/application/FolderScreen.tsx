@@ -1,4 +1,5 @@
 import {
+  Animated,
   Dimensions,
   FlatList,
   StyleSheet,
@@ -24,7 +25,6 @@ import { auth } from '../../firebase'
 import BottomModalBlock from '../../components/BottomModalBlock'
 import { GetLastUpdated, GetSortedTasks } from '../../functions/function'
 import { Swipeable } from 'react-native-gesture-handler'
-import Animated from 'react-native-reanimated'
 import text from '../../constants/text'
 import DeleteTaskModal from '../../components/DeleteTaskModal'
 import SwipeTaskRight from '../../components/SwipeTaskRight'
@@ -41,8 +41,7 @@ export default function FolderScreen({ navigation, route }: any) {
 
   const [taskId, setTaskId] = useState<string>('')
 
-  const [bottomSheetContent, setBottomSheetContent] =
-    useState<string>('taskBlock')
+  const [bottomSheetContent, setBottomSheetContent] = useState<any>('taskBlock')
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const snapPoints = useMemo(() => ['100%'], []) // TODO
 
@@ -191,7 +190,13 @@ export default function FolderScreen({ navigation, route }: any) {
           action={() => {
             navigation.goBack()
           }}
+          settings={() => {
+            setTaskId('')
+            setBottomSheetContent('folderBlock')
+            bottomSheetModalRef.current?.present()
+          }}
         />
+
         <Button
           title="Add"
           disable={false}
@@ -200,8 +205,8 @@ export default function FolderScreen({ navigation, route }: any) {
             setBottomSheetContent('taskBlock')
             bottomSheetModalRef.current?.present()
           }}
-          // style={{ width: '49%' }}
         />
+
         {/* </View> */}
 
         {family.folder[route.params.folderId]?.task &&

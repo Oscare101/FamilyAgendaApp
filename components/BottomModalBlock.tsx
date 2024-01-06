@@ -1,26 +1,16 @@
 import {
   Dimensions,
-  FlatList,
   StatusBar,
-  StyleSheet,
   Text,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-  useColorScheme,
 } from 'react-native'
 import colors from '../constants/colors'
-import { RootState } from '../redux'
-import { useSelector } from 'react-redux'
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet'
-import { useMemo, useRef, useState } from 'react'
-import { Ionicons } from '@expo/vector-icons'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import IconColorBlockModal from './IconColorBlockModal'
 import TaskBlockModal from './TaskBlockModal'
 import TaskInfoBlockModal from './TaskInfoBlockModal'
+import FolderInfoBlockModal from './FolderInfoBlockModal'
 
 const width = Dimensions.get('screen').width
 
@@ -52,13 +42,19 @@ export default function BottomModalBlock(props: any) {
         onEdit={props.onEdit}
       />
     ),
+    folderBlock: (
+      <FolderInfoBlockModal
+        familyId={props.familyId}
+        folderId={props.folderId}
+      />
+    ),
   }
 
   return (
     <BottomSheetModal
       backgroundStyle={{ backgroundColor: '#00000000' }}
       handleIndicatorStyle={{
-        backgroundColor: '#FFF',
+        backgroundColor: '#00000000',
       }}
       ref={props.bottomSheetModalRef}
       snapPoints={props.snapPoints}
@@ -71,9 +67,7 @@ export default function BottomModalBlock(props: any) {
                 backgroundColor: '#00000066',
               },
             ]}
-          >
-            <StatusBar backgroundColor={'#eee'} />
-          </View>
+          ></View>
         </TouchableWithoutFeedback>
       )}
     >
@@ -83,8 +77,6 @@ export default function BottomModalBlock(props: any) {
           flex: 1,
           borderTopRightRadius: width * 0.05,
           borderTopLeftRadius: width * 0.05,
-
-          // margin: width * 0.03,
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'flex-start',

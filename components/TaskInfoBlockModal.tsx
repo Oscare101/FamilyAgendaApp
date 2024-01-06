@@ -37,13 +37,13 @@ export default function TaskInfoBlockModal(props: any) {
 
   const data = [
     {
-      title: 'Urgent',
+      title: text[language].Task,
       value: family.folder[props.folderId].task[props.taskId].urgent
-        ? 'yes'
-        : 'no',
+        ? text[language].Urgent
+        : text[language].Regular,
     },
     {
-      title: 'Author',
+      title: text[language].Author,
       value:
         users[
           family.folder[props.folderId].task[props.taskId].author.replace(
@@ -53,7 +53,7 @@ export default function TaskInfoBlockModal(props: any) {
         ]?.name,
     },
     {
-      title: 'Created',
+      title: text[language].Created,
       value: `${
         GetDateTime(family.folder[props.folderId].task[props.taskId].created)
           .time

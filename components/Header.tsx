@@ -13,6 +13,7 @@ const width = Dimensions.get('screen').width
 interface HeaderProps {
   title: string
   action: any
+  settings?: any
 }
 
 export default function Header(props: HeaderProps) {
@@ -32,6 +33,21 @@ export default function Header(props: HeaderProps) {
       <Text numberOfLines={1} style={styles.title}>
         {props.title}
       </Text>
+      {props.settings ? (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={props.settings}
+          style={[styles.button, { marginLeft: width * 0.02 }]}
+        >
+          <Ionicons
+            name="settings-outline"
+            size={width * 0.09}
+            color={colors.text}
+          />
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
     </View>
   )
 }
@@ -54,5 +70,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: width * 0.07,
     color: colors.text,
+    textAlign: 'right',
+    flex: 1,
   },
 })

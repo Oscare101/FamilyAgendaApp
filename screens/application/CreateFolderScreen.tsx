@@ -2,7 +2,6 @@ import {
   Dimensions,
   Keyboard,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
@@ -11,18 +10,12 @@ import colors from '../../constants/colors'
 import { auth } from '../../firebase'
 import BGCircles from '../../components/BGCircles'
 import Button from '../../components/Button'
-import {
-  CreateFamily,
-  CreateFolder,
-  UpdateFamily,
-  UpdateUser,
-} from '../../functions/actions'
+import { CreateFolder } from '../../functions/actions'
 import { useMemo, useRef, useState } from 'react'
 import { Family, Folder, User } from '../../constants/interfaces'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import Header from '../../components/Header'
-import InputTextBlock from '../../components/InputTextBlock'
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
@@ -33,7 +26,6 @@ import BottomModalBlock from '../../components/BottomModalBlock'
 const width = Dimensions.get('screen').width
 
 export default function CreateFolderScreen({ navigation }: any) {
-  const user: User = useSelector((state: RootState) => state.user)
   const family: Family = useSelector((state: RootState) => state.family)
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -58,7 +50,6 @@ export default function CreateFolderScreen({ navigation }: any) {
     }
 
     await CreateFolder(family.id, newFolder)
-
     navigation.goBack()
   }
   const input = (
