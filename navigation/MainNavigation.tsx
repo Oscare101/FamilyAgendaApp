@@ -16,6 +16,7 @@ import SettingsScreen from '../screens/application/SettingsScreen'
 import EnterFamilyScreen from '../screens/application/EnterFamilyScreen'
 import CreateFolderScreen from '../screens/application/CreateFolderScreen'
 import FolderScreen from '../screens/application/FolderScreen'
+import CreateTaskScreen from '../screens/application/CreateTaskScreen'
 
 const Stack = createStackNavigator()
 
@@ -154,18 +155,18 @@ export default function MainNavigation() {
         name="FolderScreen"
         component={FolderScreen}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         options={{
           headerShown: false,
           headerLeft: () => null,
           animationEnabled: true,
-          gestureDirection: 'vertical',
-          // gestureEnabled: true,
-          cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+          gestureDirection: 'horizontal',
+          gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
-        name="FolderScreen"
-        component={FolderScreen}
-      /> */}
+        name="CreateTaskScreen"
+        component={CreateTaskScreen}
+      />
     </Stack.Navigator>
   )
 

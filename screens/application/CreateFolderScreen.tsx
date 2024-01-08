@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native'
 import colors from '../../constants/colors'
-import { auth } from '../../firebase'
 import BGCircles from '../../components/BGCircles'
 import Button from '../../components/Button'
 import {
@@ -16,17 +15,15 @@ import {
   DeleteFolder,
   UpdateFolder,
 } from '../../functions/actions'
-import { useMemo, useRef, useState } from 'react'
+import { useState } from 'react'
 import { Family, Folder, User } from '../../constants/interfaces'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import Header from '../../components/Header'
-
 import { Ionicons } from '@expo/vector-icons'
-import BottomModalBlock from '../../components/BottomModalBlock'
-import IconColorBlockModal from '../../components/IconColorBlockModal'
 import text from '../../constants/text'
 import DeleteModal from '../../components/DeleteModal'
+import IconColorBlock from '../../components/IconColorBlock'
 
 const width = Dimensions.get('screen').width
 
@@ -149,7 +146,7 @@ export default function CreateFolderScreen({ navigation, route }: any) {
         action={() => navigation.goBack()}
       />
       {input}
-      <IconColorBlockModal
+      <IconColorBlock
         color={color}
         icon={icon}
         setIcon={(value: keyof typeof Ionicons.glyphMap) => setIcon(value)}
@@ -179,6 +176,7 @@ export default function CreateFolderScreen({ navigation, route }: any) {
             CreateFolderFunc()
           }
         }}
+        style={{ marginBottom: width * 0.05 }}
       />
       {/* MODAL */}
       <DeleteModal

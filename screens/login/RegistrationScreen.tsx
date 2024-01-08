@@ -46,7 +46,7 @@ export default function RegistrationScreen({ navigation }: any) {
       <Header title="" action={() => navigation.goBack()} />
 
       <View style={styles.column}>
-        <Text style={styles.title}>Registration</Text>
+        <Text style={styles.title}>{text[language].Registration}</Text>
         <View style={{ width: '100%', alignItems: 'center' }}>
           <InputTextBlock
             icon="person-outline"
@@ -68,7 +68,7 @@ export default function RegistrationScreen({ navigation }: any) {
           />
           <Text style={styles.error}>{error}</Text>
           <Button
-            title="Creat account"
+            title={text[language].CreateAccount}
             disable={
               !(
                 rules.emailTest.test(email) &&

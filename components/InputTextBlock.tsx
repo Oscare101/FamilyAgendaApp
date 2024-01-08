@@ -2,6 +2,7 @@ import { Dimensions, TextInput, TouchableOpacity, View } from 'react-native'
 import colors from '../constants/colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useState } from 'react'
+import text from '../constants/text'
 
 const width = Dimensions.get('screen').width
 
@@ -14,7 +15,10 @@ interface InputTextBlockProps {
 }
 
 export default function InputTextBlock(props: InputTextBlockProps) {
-  const [open, setOpen] = useState<boolean>(props.type !== 'password')
+  const language = 'UA'
+  const [open, setOpen] = useState<boolean>(
+    props.type !== text[language].password
+  )
 
   return (
     <View
@@ -54,7 +58,7 @@ export default function InputTextBlock(props: InputTextBlockProps) {
         }}
         onChangeText={(value: string) => props.setValue(value)}
       />
-      {props.type === 'password' ? (
+      {props.type === text[language].password ? (
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => setOpen(!open)}

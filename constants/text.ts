@@ -1,5 +1,7 @@
 const text: any = {
   UA: {
+    Login: 'Вхід',
+    Registration: 'Реєстрація',
     Clear: 'Очистити',
     Save: 'Зберегти',
     title: 'назва',
@@ -37,6 +39,9 @@ const text: any = {
     FamilyPassword: 'Пароль',
     FamilyUsers: 'Учасники',
     Enter: 'Доєднатись',
+    CreateTask: 'Створити задачу',
+    UpdateTask: 'Редагувати задачу',
+    NoTasksYet: 'Поки нема жодної задачі',
   },
 }
 

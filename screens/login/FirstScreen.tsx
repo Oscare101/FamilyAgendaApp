@@ -15,9 +15,11 @@ import Button from '../../components/Button'
 import rules from '../../constants/rules'
 import { LogIn } from '../../functions/actions'
 import { auth } from '../../firebase'
+import text from '../../constants/text'
 const width = Dimensions.get('screen').width
 
 export default function FirstScreen({ navigation }: any) {
+  const language = 'UA'
   return (
     <View style={styles.container}>
       <BGCircles />
@@ -25,12 +27,12 @@ export default function FirstScreen({ navigation }: any) {
         <Text style={styles.title}>Family Agenda</Text>
         <View style={{ width: '100%', alignItems: 'center' }}>
           <Button
-            title="Login"
+            title={text[language].Login}
             disable={false}
             action={() => navigation.navigate('LoginScreen')}
           />
           <Button
-            title="Registration"
+            title={text[language].Registration}
             disable={false}
             action={() => navigation.navigate('RegistrationScreen')}
           />

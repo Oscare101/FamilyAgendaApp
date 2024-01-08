@@ -45,7 +45,7 @@ export default function LoginScreen({ navigation }: any) {
       <Header title="" action={() => navigation.goBack()} />
 
       <View style={styles.column}>
-        <Text style={styles.title}>Login</Text>
+        <Text style={styles.title}>{text[language].Login}</Text>
         <View style={{ width: '100%', alignItems: 'center' }}>
           <InputTextBlock
             icon="person-outline"
@@ -67,7 +67,7 @@ export default function LoginScreen({ navigation }: any) {
           />
           <Text style={styles.error}>{error}</Text>
           <Button
-            title="Login"
+            title={text[language].Login}
             disable={
               !(
                 rules.emailTest.test(email) &&

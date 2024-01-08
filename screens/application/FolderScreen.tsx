@@ -9,20 +9,15 @@ import {
 } from 'react-native'
 import colors from '../../constants/colors'
 import BGCircles from '../../components/BGCircles'
-import { Family, Folder, Task, User } from '../../constants/interfaces'
+import { Family, User } from '../../constants/interfaces'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import Header from '../../components/Header'
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet'
-import { useMemo, useRef, useState } from 'react'
+
+import { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
-import Button from '../../components/Button'
-import { CreateTask, DeleteTask, UpdateTask } from '../../functions/actions'
+import { DeleteTask, UpdateTask } from '../../functions/actions'
 import { auth } from '../../firebase'
-import BottomModalBlock from '../../components/BottomModalBlock'
 import { GetLastUpdated, GetSortedTasks } from '../../functions/function'
 import { Swipeable } from 'react-native-gesture-handler'
 import text from '../../constants/text'
@@ -39,15 +34,10 @@ export default function FolderScreen({ navigation, route }: any) {
 
   const [modal, setModal] = useState<any>(null)
 
-  const [taskId, setTaskId] = useState<string>('')
-
-  const [bottomSheetContent, setBottomSheetContent] = useState<any>('taskBlock')
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
-  const snapPoints = useMemo(() => ['100%'], []) // TODO
-
   const [swipeableRef, setSwipeableRef] = useState<any>(null)
   let row: Array<any> = []
   let prevOpenedRow: any
+
   const onSwipeableOpen = (index: any) => {
     if (swipeableRef) {
       swipeableRef.close()
@@ -91,10 +81,10 @@ export default function FolderScreen({ navigation, route }: any) {
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => {
-          setTaskId(item.id)
-          setBottomSheetContent('taskInfoBlock')
-          bottomSheetModalRef.current?.present()
-          // navigation.navigate('TaskInfoScreen', { taskId: item.id })
+          navigation.navigate('CreateTaskScreen', {
+            folderId: route.params.folderId,
+            task: item,
+          })
         }}
         style={{
           width: '100%',
@@ -182,47 +172,57 @@ export default function FolderScreen({ navigation, route }: any) {
   }
 
   return (
-    <BottomSheetModalProvider>
-      <View style={styles.container}>
-        <BGCircles />
-        <Header
-          title={family.folder[route.params.folderId]?.name}
-          action={() => {
-            navigation.goBack()
-          }}
-          settings={() => {
-            // setTaskId('')
-            // setBottomSheetContent('folderBlock')
-            // bottomSheetModalRef.current?.present()
-            navigation.navigate('CreateFolderScreen', {
-              folder: family.folder[route.params.folderId],
-            }) // TODO
-          }}
+    <View style={styles.container}>
+      <BGCircles />
+      <Header
+        title={family.folder[route.params.folderId]?.name}
+        action={() => {
+          navigation.goBack()
+        }}
+        settings={() => {
+          // setTaskId('')
+          // setBottomSheetContent('folderBlock')
+          // bottomSheetModalRef.current?.present()
+          navigation.navigate('CreateFolderScreen', {
+            folder: family.folder[route.params.folderId],
+          }) // TODO
+        }}
+      />
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() =>
+          navigation.navigate('CreateTaskScreen', {
+            folderId: route.params.folderId,
+          })
+        }
+        style={{
+          width: width * 0.2,
+          height: width * 0.2,
+          borderRadius: width * 0.2,
+          backgroundColor: colors.active,
+          position: 'absolute',
+          bottom: width * 0.05,
+          right: width * 0.05,
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 2,
+        }}
+      >
+        <Ionicons name="add" size={width * 0.14} color={colors.bg} />
+      </TouchableOpacity>
+
+      {/* </View> */}
+
+      {family.folder[route.params.folderId]?.task &&
+      Object.values(family.folder[route.params.folderId]?.task).length ? (
+        <FlatList
+          style={{ width: '100%' }}
+          data={GetSortedTasks(family.folder[route.params.folderId].task)}
+          renderItem={RenderTask}
         />
-
-        <Button
-          title="Add"
-          disable={false}
-          action={() => {
-            setTaskId('')
-            setBottomSheetContent('taskBlock')
-            bottomSheetModalRef.current?.present()
-          }}
-        />
-
-        {/* </View> */}
-
-        {family.folder[route.params.folderId]?.task &&
-        Object.values(family.folder[route.params.folderId]?.task).length ? (
-          <FlatList
-            style={{ width: '100%' }}
-            data={GetSortedTasks(family.folder[route.params.folderId].task)}
-            renderItem={RenderTask}
-          />
-        ) : (
-          <></>
-        )}
-      </View>
+      ) : (
+        <Text style={styles.comment}>{text[language].NoTasksYet}</Text>
+      )}
       {/* MODAL */}
       <DeleteModal
         modal={modal}
@@ -239,19 +239,7 @@ export default function FolderScreen({ navigation, route }: any) {
           setModal(null)
         }}
       />
-      {/* BOTTOM */}
-      <BottomModalBlock
-        bottomSheetModalRef={bottomSheetModalRef}
-        snapPoints={snapPoints}
-        dismiss={() => bottomSheetModalRef.current?.dismiss()}
-        content={bottomSheetContent}
-        familyId={family.id}
-        taskId={taskId}
-        folderId={route.params.folderId}
-        onEdit={() => setBottomSheetContent('taskBlock')}
-        onBack={() => setBottomSheetContent('taskInfoBlock')}
-      />
-    </BottomSheetModalProvider>
+    </View>
   )
 }
 
@@ -281,5 +269,10 @@ const styles = StyleSheet.create({
   taskTitle: {
     fontSize: width * 0.05,
     color: colors.text,
+  },
+  comment: {
+    color: colors.comment,
+    fontSize: width * 0.05,
+    marginTop: width * 0.05,
   },
 })

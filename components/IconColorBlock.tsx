@@ -35,7 +35,7 @@ const colorData = [
 
 const width = Dimensions.get('screen').width
 
-export default function IconColorBlockModal(props: any) {
+export default function IconColorBlock(props: any) {
   const language = 'UA'
   function RenderColorItem({ item }: any) {
     return (

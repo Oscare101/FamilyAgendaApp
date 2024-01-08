@@ -9,20 +9,15 @@ import {
   View,
 } from 'react-native'
 import colors from '../../constants/colors'
-import { auth } from '../../firebase'
 import BGCircles from '../../components/BGCircles'
 import Button from '../../components/Button'
-import { LogOut } from '../../functions/actions'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { getDatabase, onValue, ref } from 'firebase/database'
 import { Family, Task, User } from '../../constants/interfaces'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import ProfileHeader from '../../components/ProfileHeader'
 import MainUserCircles from '../../components/MainUserCircles'
-import BottomModalBlock from '../../components/BottomModalBlock'
 import { Ionicons } from '@expo/vector-icons'
-import { GetDateTime, GetLastUpdated } from '../../functions/function'
+import { GetLastUpdated } from '../../functions/function'
 import text from '../../constants/text'
 
 const width = Dimensions.get('screen').width
