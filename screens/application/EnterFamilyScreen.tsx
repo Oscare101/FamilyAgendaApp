@@ -54,13 +54,22 @@ export default function EnterFamilyScreen({ navigation }: any) {
 
     if (
       foundFamily !== undefined &&
-      !foundFamily.users.includes(auth.currentUser?.email?.replace('.', ',')) &&
+      !(
+        (foundFamily.users &&
+          foundFamily.users.includes(
+            auth.currentUser?.email?.replace('.', ',')
+          )) ||
+        foundFamily.users
+      ) &&
       auth.currentUser &&
       auth.currentUser.email
     ) {
       const data: Family = {
         ...foundFamily,
-        users: [...foundFamily.users, auth.currentUser.email.replace('.', ',')],
+        users: [
+          ...(foundFamily?.users || []),
+          auth.currentUser.email.replace('.', ','),
+        ],
       }
 
       await UpdateFamily(data)
