@@ -117,6 +117,7 @@ export default function FolderScreen({ navigation, route }: any) {
         >
           <Animated.View style={styles.card}>
             <Text
+              numberOfLines={1}
               style={[
                 styles.taskTitle,
                 {
@@ -170,6 +171,34 @@ export default function FolderScreen({ navigation, route }: any) {
     )
   }
 
+  const hintBlock = (
+    <View style={[styles.rowBetween, { marginVertical: width * 0.03 }]}>
+      <Ionicons
+        name="chevron-forward"
+        size={width * 0.04}
+        color={colors.comment}
+      />
+      <Ionicons
+        name="chevron-forward"
+        size={width * 0.04}
+        color={colors.comment}
+      />
+      <Text style={styles.hint}>{text[language].SwipeToToggle}</Text>
+      <View style={{ flex: 1 }} />
+      <Text style={styles.hint}>{text[language].SwipeToDelete}</Text>
+      <Ionicons
+        name="chevron-back"
+        size={width * 0.04}
+        color={colors.comment}
+      />
+      <Ionicons
+        name="chevron-back"
+        size={width * 0.04}
+        color={colors.comment}
+      />
+    </View>
+  )
+
   return (
     <View style={styles.container}>
       <BGCircles />
@@ -208,6 +237,7 @@ export default function FolderScreen({ navigation, route }: any) {
       >
         <Ionicons name="add" size={width * 0.14} color={colors.bg} />
       </TouchableOpacity>
+      {hintBlock}
 
       {family.folder &&
       family.folder[route.params.folderId]?.task &&
@@ -266,10 +296,15 @@ const styles = StyleSheet.create({
   taskTitle: {
     fontSize: width * 0.05,
     color: colors.text,
+    marginRight: '5%',
   },
   comment: {
     color: colors.comment,
     fontSize: width * 0.05,
     marginTop: width * 0.05,
+  },
+  hint: {
+    fontSize: width * 0.035,
+    color: colors.comment,
   },
 })

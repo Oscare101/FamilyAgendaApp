@@ -45,6 +45,13 @@ const text: any = {
     LeaveFamily: "Вийти з сім'ї",
     NoFoldersYet: 'Поки нема жодної папки',
     EditFamily: "Редагувати сім'ю",
+    SwipeToToggle: 'Потягніть\nщоб перемкнути',
+    SwipeToDelete: 'Потягніть\nщоб видалити',
+    Status: 'Статус',
+    Active: 'Активна',
+    Done: 'Виконано',
+    Executant: 'Виконавець',
+    DoneTime: 'Виконано',
   },
 }
 
