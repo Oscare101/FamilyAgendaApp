@@ -2,6 +2,7 @@ import {
   Dimensions,
   Keyboard,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
   View,
@@ -10,32 +11,37 @@ import colors from '../../constants/colors'
 import { auth } from '../../firebase'
 import BGCircles from '../../components/BGCircles'
 import Button from '../../components/Button'
-import { CreateFolder } from '../../functions/actions'
+import {
+  CreateFolder,
+  DeleteFolder,
+  UpdateFolder,
+} from '../../functions/actions'
 import { useMemo, useRef, useState } from 'react'
 import { Family, Folder, User } from '../../constants/interfaces'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import Header from '../../components/Header'
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet'
+
 import { Ionicons } from '@expo/vector-icons'
 import BottomModalBlock from '../../components/BottomModalBlock'
+import IconColorBlockModal from '../../components/IconColorBlockModal'
+import text from '../../constants/text'
+import DeleteModal from '../../components/DeleteModal'
 
 const width = Dimensions.get('screen').width
 
-export default function CreateFolderScreen({ navigation }: any) {
+export default function CreateFolderScreen({ navigation, route }: any) {
+  const language = 'UA'
   const family: Family = useSelector((state: RootState) => state.family)
 
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
-  const snapPoints = useMemo(() => [width * 0.6 + 100], [])
-
-  const [name, setName] = useState<string>('')
-  const [icon, setIcon] = useState<keyof typeof Ionicons.glyphMap | ''>('')
-  const [color, setColor] = useState<string>('')
+  const [name, setName] = useState<string>(route.params?.folder?.name || '')
+  const [icon, setIcon] = useState<keyof typeof Ionicons.glyphMap | ''>(
+    route.params?.folder?.icon || ''
+  )
+  const [color, setColor] = useState<string>(route.params?.folder?.color || '')
 
   const [loading, setLoading] = useState<boolean>(false)
+  const [modal, setModal] = useState<boolean>(false)
 
   async function CreateFolderFunc() {
     setLoading(true)
@@ -52,6 +58,31 @@ export default function CreateFolderScreen({ navigation }: any) {
     await CreateFolder(family.id, newFolder)
     navigation.goBack()
   }
+
+  async function UpdateFolderFunc() {
+    setLoading(true)
+
+    const newFolder: any = {
+      name: name,
+      id: route.params?.folder?.id,
+      icon: icon,
+      color: color,
+    }
+
+    await UpdateFolder(family.id, newFolder)
+    navigation.goBack()
+  }
+
+  async function DeleteFolderFunc() {
+    setLoading(true)
+    await DeleteFolder(family.id, route.params?.folder?.id)
+    setModal(false)
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'MainScreen' }],
+    })
+  }
+
   const input = (
     <View
       style={{
@@ -78,7 +109,7 @@ export default function CreateFolderScreen({ navigation }: any) {
         }}
         onPress={() => {
           Keyboard.dismiss()
-          bottomSheetModalRef.current?.present()
+          // bottomSheetModalRef.current?.present()
         }}
       >
         <Ionicons
@@ -89,7 +120,7 @@ export default function CreateFolderScreen({ navigation }: any) {
       </TouchableOpacity>
 
       <TextInput
-        placeholder={'name'}
+        placeholder={text[language].Title}
         value={name}
         placeholderTextColor={colors.comment}
         autoCapitalize="none"
@@ -107,28 +138,63 @@ export default function CreateFolderScreen({ navigation }: any) {
   )
 
   return (
-    <BottomSheetModalProvider>
-      <View style={styles.container}>
-        <BGCircles />
-        <Header title={'Create folder'} action={() => navigation.goBack()} />
-        {input}
-        <Button
-          title="Create folder"
-          disable={!(name && color && icon && !loading)}
-          action={CreateFolderFunc}
-        />
-      </View>
-      <BottomModalBlock
-        bottomSheetModalRef={bottomSheetModalRef}
-        snapPoints={snapPoints}
-        dismiss={() => bottomSheetModalRef.current?.dismiss()}
-        content={'iconColorBlock'}
+    <View style={styles.container}>
+      <BGCircles />
+      <Header
+        title={
+          route.params?.folder?.id
+            ? text[language].UpdateFolder
+            : text[language].CreateFolder
+        }
+        action={() => navigation.goBack()}
+      />
+      {input}
+      <IconColorBlockModal
+        color={color}
+        icon={icon}
         setIcon={(value: keyof typeof Ionicons.glyphMap) => setIcon(value)}
         setColor={(value: string) => setColor(value)}
-        icon={icon}
-        color={color}
       />
-    </BottomSheetModalProvider>
+      {route.params?.folder?.id ? (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
+            setModal(true)
+          }}
+        >
+          <Text style={styles.deleteButton}>{text[language].DeleteFolder}</Text>
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
+      <Button
+        title={
+          route.params?.folder?.id ? text[language].Save : text[language].Create
+        }
+        disable={!(name && color && icon && !loading)}
+        action={() => {
+          if (route.params?.folder?.id) {
+            UpdateFolderFunc()
+          } else {
+            CreateFolderFunc()
+          }
+        }}
+      />
+      {/* MODAL */}
+      <DeleteModal
+        modal={modal}
+        title={text[language].DeleteFolder}
+        description={`${text[language].DoYouWantToDeleteFolder} "${
+          route.params?.folder?.name || ''
+        }"`}
+        onClose={() => {
+          setModal(false)
+        }}
+        onDelete={() => {
+          DeleteFolderFunc()
+        }}
+      />
+    </View>
   )
 }
 
@@ -138,5 +204,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
     alignItems: 'center',
     justifyContent: 'flex-start',
+  },
+  deleteButton: {
+    fontSize: width * 0.05,
+    color: colors.errorText,
   },
 })

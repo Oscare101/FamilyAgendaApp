@@ -1,6 +1,7 @@
 import {
   Dimensions,
   FlatList,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -9,6 +10,7 @@ import {
 import colors from '../constants/colors'
 import { ScrollView } from 'react-native-gesture-handler'
 import { Ionicons } from '@expo/vector-icons'
+import text from '../constants/text'
 
 const iconData = [
   { title: 'basket-outline' },
@@ -34,19 +36,21 @@ const colorData = [
 const width = Dimensions.get('screen').width
 
 export default function IconColorBlockModal(props: any) {
+  const language = 'UA'
   function RenderColorItem({ item }: any) {
     return (
       <TouchableOpacity
         style={{
-          width: width * 0.18,
+          width: width * 0.18 * 0.92,
           height: 40,
-          margin: width * 0.01,
+          margin: width * 0.01 * 0.92,
           borderWidth: 1,
           borderRadius: 8,
           alignItems: 'center',
           justifyContent: 'center',
-          borderColor: item.color,
+          borderColor: props.color === item.color ? colors.text : item.color,
           backgroundColor: item.color,
+          elevation: props.color === item.color ? 5 : 0,
         }}
         activeOpacity={0.8}
         onPress={() => props.setColor(item.color)}
@@ -58,21 +62,26 @@ export default function IconColorBlockModal(props: any) {
     return (
       <TouchableOpacity
         style={{
-          width: width * 0.18,
-          height: width * 0.18,
-          margin: width * 0.01,
+          width: width * 0.18 * 0.92,
+          height: width * 0.18 * 0.92,
+          margin: width * 0.01 * 0.92,
           borderWidth: 1,
           borderRadius: 8,
           alignItems: 'center',
           justifyContent: 'center',
           // borderColor: props.color,
-          backgroundColor: props.color,
+          backgroundColor: colors.card,
           opacity: props.icon === item.title ? 1 : 0.5,
+          elevation: props.icon === item.title ? 5 : 0,
         }}
         activeOpacity={0.8}
         onPress={() => props.setIcon(item.title)}
       >
-        <Ionicons name={item.title} size={width * 0.12} color={colors.text} />
+        <Ionicons
+          name={item.title}
+          size={width * 0.12 * 0.92}
+          color={colors.text}
+        />
       </TouchableOpacity>
     )
   }
@@ -81,26 +90,15 @@ export default function IconColorBlockModal(props: any) {
     <>
       <View
         style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-          borderBottomWidth: 1,
-          // borderBlockColor: colors[themeColor].comment,
-          height: 60,
-          backgroundColor: colors.card,
-        }}
-      >
-        <Text style={{ fontSize: 20, color: colors.text }}>Icon</Text>
-      </View>
-      <View
-        style={{
           flex: 1,
           width: '100%',
           alignItems: 'center',
           justifyContent: 'center',
+          marginTop: 20,
         }}
       >
-        <View style={{ flexDirection: 'row' }}>
+        <Text style={styles.comment}>{text[language].ChooseColor}</Text>
+        <View style={{ flexDirection: 'row', width: '92%' }}>
           <FlatList
             style={{ width: '100%' }}
             horizontal
@@ -109,16 +107,25 @@ export default function IconColorBlockModal(props: any) {
             renderItem={RenderColorItem}
           />
         </View>
-        <ScrollView style={{ flex: 1, width: '100%' }}>
-          <FlatList
-            style={{ width: '100%' }}
-            scrollEnabled={false}
-            numColumns={5}
-            data={iconData}
-            renderItem={RenderIconItem}
-          />
-        </ScrollView>
+        <Text style={styles.comment}>{text[language].ChooseIcon}</Text>
+
+        <FlatList
+          style={{ width: '92%' }}
+          scrollEnabled={false}
+          numColumns={5}
+          data={iconData}
+          renderItem={RenderIconItem}
+        />
       </View>
     </>
   )
 }
+
+const styles = StyleSheet.create({
+  comment: {
+    width: '92%',
+    textAlign: 'left',
+    fontSize: width * 0.05,
+    color: colors.comment,
+  },
+})

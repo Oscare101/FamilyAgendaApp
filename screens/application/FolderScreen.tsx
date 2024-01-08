@@ -26,9 +26,9 @@ import BottomModalBlock from '../../components/BottomModalBlock'
 import { GetLastUpdated, GetSortedTasks } from '../../functions/function'
 import { Swipeable } from 'react-native-gesture-handler'
 import text from '../../constants/text'
-import DeleteTaskModal from '../../components/DeleteTaskModal'
 import SwipeTaskRight from '../../components/SwipeTaskRight'
 import SwipeTaskLeft from '../../components/SwipeTaskLeft'
+import DeleteModal from '../../components/DeleteModal'
 
 const width = Dimensions.get('screen').width
 
@@ -191,9 +191,12 @@ export default function FolderScreen({ navigation, route }: any) {
             navigation.goBack()
           }}
           settings={() => {
-            setTaskId('')
-            setBottomSheetContent('folderBlock')
-            bottomSheetModalRef.current?.present()
+            // setTaskId('')
+            // setBottomSheetContent('folderBlock')
+            // bottomSheetModalRef.current?.present()
+            navigation.navigate('CreateFolderScreen', {
+              folder: family.folder[route.params.folderId],
+            }) // TODO
           }}
         />
 
@@ -221,8 +224,12 @@ export default function FolderScreen({ navigation, route }: any) {
         )}
       </View>
       {/* MODAL */}
-      <DeleteTaskModal
+      <DeleteModal
         modal={modal}
+        title={text[language].DeleteTask}
+        description={`${text[language].DoYouWantToDeleteTask} "${
+          modal?.title || ''
+        }"`}
         onClose={() => {
           setModal(null)
           CloseSwipeables()

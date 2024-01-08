@@ -12,7 +12,7 @@ import text from '../constants/text'
 
 const width = Dimensions.get('screen').width
 
-export default function DeleteTaskModal(props: any) {
+export default function DeleteModal(props: any) {
   const language = 'UA'
   return (
     <Modal transparent style={{ flex: 1 }} visible={!!props.modal}>
@@ -49,7 +49,7 @@ export default function DeleteTaskModal(props: any) {
                 marginBottom: width * 0.06,
               }}
             >
-              {text[language].DeleteTask}
+              {props.title}
             </Text>
             <Text
               style={{
@@ -59,8 +59,7 @@ export default function DeleteTaskModal(props: any) {
                 fontWeight: '300',
               }}
             >
-              {text[language].DoYouWantToDelete}{' '}
-              <Text style={{ fontWeight: '500' }}>{props.modal?.title}</Text>
+              {props.description}
             </Text>
             <View style={styles.rowBetween}>
               <TouchableOpacity

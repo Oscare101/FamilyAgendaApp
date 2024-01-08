@@ -9,7 +9,7 @@ const text: any = {
     Cancel: 'Скасувати',
     Delete: 'Видалити',
     DeleteTask: 'Видалити задачу',
-    DoYouWantToDelete: 'Ви хочете видалити задачу',
+    DoYouWantToDeleteTask: 'Ви хочете видалити задачу',
     Edit: 'Редагувати',
     Back: 'Назад',
     Task: 'Задача',
@@ -17,6 +17,13 @@ const text: any = {
     Regular: 'Звичайна',
     Author: 'Автор',
     Created: 'Створена',
+    UpdateFolder: 'Редагувати папку',
+    CreateFolder: 'Створити папку',
+    Create: 'Створити',
+    DeleteFolder: 'Видалити папку',
+    ChooseColor: 'Оберіть колір',
+    ChooseIcon: 'Оберіть іконку',
+    DoYouWantToDeleteFolder: 'Ви хочете видалити папку',
   },
 }
 

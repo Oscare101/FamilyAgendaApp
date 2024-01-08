@@ -123,6 +123,14 @@ export async function UpdateFolder(familyId: string, data: any) {
   }
 }
 
+export async function DeleteFolder(familyId: string, folderID: any) {
+  try {
+    await remove(ref(getDatabase(), `family/${familyId}/folder/${folderID}`))
+  } catch (error) {
+    console.log('DeleteFolder', error)
+  }
+}
+
 // TASKS
 
 export async function CreateTask(
