@@ -14,6 +14,7 @@ interface ButtonProps {
   disable: boolean
   action: any
   style?: any
+  longPress?: any
 }
 
 export default function Button(props: ButtonProps) {
@@ -21,6 +22,11 @@ export default function Button(props: ButtonProps) {
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={props.action}
+      onLongPress={() => {
+        if (props.longPress) {
+          props.longPress()
+        }
+      }}
       disabled={props.disable}
       style={[
         {

@@ -101,9 +101,9 @@ export default function FolderScreen({ navigation, route }: any) {
           overshootLeft={true}
           overshootRight={true}
           overshootFriction={0.2}
-          leftThreshold={width * 0.2}
-          rightThreshold={width * 0.2}
-          friction={0.5}
+          leftThreshold={width * 0.5}
+          rightThreshold={width * 0.5}
+          friction={0.7}
           onSwipeableOpen={() => {
             onSwipeableOpen(index)
           }}
@@ -246,6 +246,8 @@ export default function FolderScreen({ navigation, route }: any) {
           style={{ width: '100%' }}
           data={GetSortedTasks(family.folder[route.params.folderId].task)}
           renderItem={RenderTask}
+          ListFooterComponent={() => <View style={{ height: width * 0.3 }} />}
+          showsVerticalScrollIndicator={false}
         />
       ) : (
         <Text style={styles.comment}>{text[language].NoTasksYet}</Text>
