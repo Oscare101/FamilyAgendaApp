@@ -28,7 +28,9 @@ export default function CreateTaskScreen({ navigation, route }: any) {
   const family: Family = useSelector((state: RootState) => state.family)
 
   const [title, setTitle] = useState<string>(route.params?.task?.title || '')
-  const [urgent, setUrgent] = useState<boolean>(false)
+  const [urgent, setUrgent] = useState<boolean>(
+    route.params?.task?.urgent || false
+  )
 
   const [loading, setLoading] = useState<boolean>(false)
   const [modal, setModal] = useState<boolean>(false)
@@ -117,7 +119,7 @@ export default function CreateTaskScreen({ navigation, route }: any) {
             setModal(true)
           }}
         >
-          <Text style={styles.deleteButton}>{text[language].DeleteFolder}</Text>
+          <Text style={styles.deleteButton}>{text[language].DeleteTask}</Text>
         </TouchableOpacity>
       ) : (
         <></>
