@@ -69,7 +69,6 @@ export default function IconColorBlock(props: any) {
           borderRadius: 8,
           alignItems: 'center',
           justifyContent: 'center',
-          // borderColor: props.color,
           backgroundColor: colors.card,
           opacity: props.icon === item.title ? 1 : 0.5,
           elevation: props.icon === item.title ? 5 : 0,

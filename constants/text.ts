@@ -42,6 +42,9 @@ const text: any = {
     CreateTask: 'Створити задачу',
     UpdateTask: 'Редагувати задачу',
     NoTasksYet: 'Поки нема жодної задачі',
+    LeaveFamily: "Вийти з сім'ї",
+    NoFoldersYet: 'Поки нема жодної папки',
+    EditFamily: "Редагувати сім'ю",
   },
 }
 

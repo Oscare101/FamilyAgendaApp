@@ -10,55 +10,50 @@ import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import Header from '../../components/Header'
 import InputTextBlock from '../../components/InputTextBlock'
+import text from '../../constants/text'
 
-export default function CreateFamilyScreen({ navigation }: any) {
+export default function CreateFamilyScreen({ navigation, route }: any) {
+  const language = 'UA'
   const user: User = useSelector((state: RootState) => state.user)
 
-  const [name, setName] = useState<string>('')
+  const [name, setName] = useState<string>(route.params?.family?.name || '')
   const [loading, setLoading] = useState<boolean>(false)
 
-  async function CreateFamilyFunc() {
+  async function UpdateFamilyFunc() {
     setLoading(true)
 
-    if (auth.currentUser && auth.currentUser.email) {
-      const id: string =
-        auth.currentUser.email.replace('.', ',') + new Date().getTime()
-
-      const data: Family = {
-        name: name,
-        admin: auth.currentUser.email,
-        id: id,
-        users: [auth.currentUser.email.replace('.', ',')],
-        password: Math.random().toString(36).slice(-6),
-        folder: [],
-      }
-      await CreateFamily(data)
-
-      let userFamiliesId = user?.familiesId || []
-      const newUserData: any = {
-        familiesId: [...userFamiliesId, id],
-        currentFamilyId: id,
-      }
-      await UpdateUser(auth.currentUser.email, newUserData)
-
-      navigation.goBack()
+    const data: Family = {
+      ...route.params?.family,
+      name: name,
     }
+    await CreateFamily(data)
+
+    navigation.goBack()
   }
 
   return (
     <View style={styles.container}>
       <BGCircles />
-      <Header title={'Create family'} action={() => navigation.goBack()} />
+      <Header
+        title={
+          route.params?.family?.id
+            ? text[language].EditFamily
+            : text[language].CreateFamily
+        }
+        action={() => navigation.goBack()}
+      />
       <InputTextBlock
         value={name}
         setValue={(value: string) => setName(value)}
         icon="text-outline"
-        type="name"
+        type={text[language].name}
       />
       <Button
-        title="Create family"
+        title={
+          route.params?.family?.id ? text[language].Save : text[language].Create
+        }
         disable={!(name && !loading)}
-        action={CreateFamilyFunc}
+        action={UpdateFamilyFunc}
       />
     </View>
   )

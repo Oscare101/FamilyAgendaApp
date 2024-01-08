@@ -106,7 +106,6 @@ export default function CreateFolderScreen({ navigation, route }: any) {
         }}
         onPress={() => {
           Keyboard.dismiss()
-          // bottomSheetModalRef.current?.present()
         }}
       >
         <Ionicons

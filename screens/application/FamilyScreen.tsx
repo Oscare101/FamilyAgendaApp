@@ -17,6 +17,8 @@ import { getDatabase, onValue, ref } from 'firebase/database'
 import { auth } from '../../firebase'
 import { Ionicons } from '@expo/vector-icons'
 import text from '../../constants/text'
+import Button from '../../components/Button'
+import { UpdateFamily, UpdateUser } from '../../functions/actions'
 
 const width = Dimensions.get('screen').width
 
@@ -26,12 +28,42 @@ export default function FamilyScreen({ navigation }: any) {
   const family: Family = useSelector((state: RootState) => state.family)
 
   const [users, setUsers] = useState<any>({})
+  const [loading, setLoading] = useState<boolean>(false)
 
   async function GetUsers() {
     if (auth.currentUser && auth.currentUser.email) {
       const data = ref(getDatabase(), `user/`)
       onValue(data, (snapshot) => {
         setUsers(snapshot.val())
+      })
+    }
+  }
+
+  async function LeaveFamilyFunc() {
+    if (auth.currentUser && auth.currentUser.email) {
+      const newUsersData = family.users.filter(
+        (u: any) => u !== auth.currentUser!.email?.replace('.', ',')
+      )
+      const newFamilyData: any = {
+        ...family,
+        users: newUsersData,
+      }
+
+      await UpdateFamily(newFamilyData)
+
+      const newFamiliesId = user?.familiesId?.filter(
+        (f: any) => f !== family.id
+      )
+      const newUserData = {
+        familiesId: newFamiliesId || [],
+        currentFamilyId: newFamiliesId![0] || '',
+      }
+
+      await UpdateUser(auth.currentUser.email, newUserData)
+      setLoading(false)
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'MainScreen' }],
       })
     }
   }
@@ -46,31 +78,31 @@ export default function FamilyScreen({ navigation }: any) {
         <Text numberOfLines={1} style={styles.userItemName}>
           {users![item]!.name}
         </Text>
-        {users![item]!.email === family.admin ? (
+        {/* {users![item]!.email === family.admin ? (
           <Text numberOfLines={1} style={styles.userItemComment}>
             admin
           </Text>
         ) : family.admin === auth.currentUser?.email ? (
-          // <TouchableOpacity
-          //   style={{
-          //     backgroundColor: colors.errorBG,
-          //     height: width * 0.07,
-          //     paddingHorizontal: width * 0.03,
-          //     borderRadius: width * 0.01,
-          //     alignItems: 'center',
-          //     justifyContent: 'center',
-          //   }}
-          // >
-          //   <Ionicons
-          //     name="person-remove-outline"
-          //     size={width * 0.06}
-          //     color={colors.errorText}
-          //   />
-          // </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: colors.errorBG,
+              height: width * 0.07,
+              paddingHorizontal: width * 0.03,
+              borderRadius: width * 0.01,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Ionicons
+              name="person-remove-outline"
+              size={width * 0.06}
+              color={colors.errorText}
+            />
+          </TouchableOpacity>
           <></>
         ) : (
           <></>
-        )}
+        )} */}
       </View>
     )
   }
@@ -82,6 +114,11 @@ export default function FamilyScreen({ navigation }: any) {
         title={family.name}
         action={() => {
           navigation.goBack()
+        }}
+        settings={() => {
+          navigation.navigate('CreateFamilyScreen', {
+            family: family,
+          })
         }}
       />
       <View style={[styles.rowBetween, { width: '92%' }]}>
@@ -100,6 +137,11 @@ export default function FamilyScreen({ navigation }: any) {
           <></>
         )}
       </View>
+      <Button
+        title={text[language].LeaveFamily}
+        disable={loading}
+        action={LeaveFamilyFunc}
+      />
     </View>
   )
 }

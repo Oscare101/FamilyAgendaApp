@@ -30,8 +30,13 @@ export default function EnterFamilyScreen({ navigation }: any) {
   async function GetUserFamilies() {
     if (auth.currentUser && auth.currentUser.email) {
       const data = ref(getDatabase(), `family/`)
+
       onValue(data, (snapshot) => {
-        setFamilies(Object.values(snapshot.val()))
+        if (snapshot && snapshot.val()) {
+          setFamilies(Object.values(snapshot.val()))
+        } else {
+          setFamilies([])
+        }
       })
     }
   }

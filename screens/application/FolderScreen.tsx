@@ -112,7 +112,6 @@ export default function FolderScreen({ navigation, route }: any) {
               ToggleTaskFunc(item)
             } else {
               setModal(item)
-              // DeleteTaskFunc(item)
             }
           }}
         >
@@ -175,17 +174,16 @@ export default function FolderScreen({ navigation, route }: any) {
     <View style={styles.container}>
       <BGCircles />
       <Header
-        title={family.folder[route.params.folderId]?.name}
+        title={
+          (family.folder && family.folder[route.params.folderId]?.name) || ''
+        }
         action={() => {
           navigation.goBack()
         }}
         settings={() => {
-          // setTaskId('')
-          // setBottomSheetContent('folderBlock')
-          // bottomSheetModalRef.current?.present()
           navigation.navigate('CreateFolderScreen', {
-            folder: family.folder[route.params.folderId],
-          }) // TODO
+            folder: family?.folder![route.params.folderId],
+          })
         }}
       />
       <TouchableOpacity
@@ -211,9 +209,8 @@ export default function FolderScreen({ navigation, route }: any) {
         <Ionicons name="add" size={width * 0.14} color={colors.bg} />
       </TouchableOpacity>
 
-      {/* </View> */}
-
-      {family.folder[route.params.folderId]?.task &&
+      {family.folder &&
+      family.folder[route.params.folderId]?.task &&
       Object.values(family.folder[route.params.folderId]?.task).length ? (
         <FlatList
           style={{ width: '100%' }}

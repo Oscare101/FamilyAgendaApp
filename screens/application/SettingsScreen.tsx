@@ -44,8 +44,10 @@ export default function SettingsScreen({ navigation }: any) {
       const data = ref(getDatabase(), `family/`)
       onValue(data, (snapshot) => {
         setFamilies(
-          Object.values(snapshot.val()).filter((f: any) =>
-            f.users.includes(auth.currentUser!.email?.replace('.', ','))
+          Object.values(snapshot.val()).filter(
+            (f: any) =>
+              f.users &&
+              f.users.includes(auth.currentUser!.email?.replace('.', ','))
           )
         )
       })

@@ -34,8 +34,10 @@ export default function ProfileHeader({ navigation }: any) {
       const data = ref(getDatabase(), `family/`)
       onValue(data, (snapshot) => {
         setFamilies(
-          Object.values(snapshot.val()).filter((f: any) =>
-            f.users.includes(auth.currentUser!.email?.replace('.', ','))
+          Object.values(snapshot.val()).filter(
+            (f: any) =>
+              f.users &&
+              f.users.includes(auth.currentUser!.email?.replace('.', ','))
           )
         )
       })
@@ -89,7 +91,7 @@ export default function ProfileHeader({ navigation }: any) {
           }}
         >
           <Text numberOfLines={1} style={styles.title}>
-            {family.name}
+            {family.id === user.currentFamilyId ? family.name : ''}
           </Text>
           <Ionicons
             name="caret-down-outline"
@@ -197,7 +199,6 @@ const styles = StyleSheet.create({
     fontSize: width * 0.07,
     color: colors.text,
     marginRight: width * 0.02,
-    // flex: 1,
   },
   // MODAL
   modal: {

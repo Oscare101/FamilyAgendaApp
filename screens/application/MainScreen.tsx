@@ -136,33 +136,39 @@ export default function MainScreen({ navigation }: any) {
         </>
       ) : (
         <Button
-          title="Create family"
+          title={text[language].CreateFamily}
           disable={false}
           action={() => navigation.navigate('CreateFamilyScreen')}
         />
       )}
-      <View style={styles.rowBetween}>
-        <Text style={styles.addFolderText}>
-          {text[language].FamilyFolders}:
-        </Text>
-        <TouchableOpacity
-          style={styles.addFolderButton}
-          activeOpacity={0.8}
-          onPress={() => navigation.navigate('CreateFolderScreen')}
-        >
-          <Ionicons name="add" size={width * 0.06} color={colors.text} />
-          <Text style={styles.addFolderText}>
-            {text[language].CreateFolder}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      {family?.folder && Object.values(family?.folder)?.length ? (
-        <FlatList
-          style={{ width: '92%' }}
-          numColumns={2}
-          data={Object.values(family.folder)}
-          renderItem={RenderFolderItem}
-        />
+      {user.currentFamilyId ? (
+        <>
+          <View style={styles.rowBetween}>
+            <Text style={styles.addFolderText}>
+              {text[language].FamilyFolders}:
+            </Text>
+            <TouchableOpacity
+              style={styles.addFolderButton}
+              activeOpacity={0.8}
+              onPress={() => navigation.navigate('CreateFolderScreen')}
+            >
+              <Ionicons name="add" size={width * 0.06} color={colors.text} />
+              <Text style={styles.addFolderText}>
+                {text[language].CreateFolder}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {family?.folder && Object.values(family?.folder)?.length ? (
+            <FlatList
+              style={{ width: '92%' }}
+              numColumns={2}
+              data={Object.values(family.folder)}
+              renderItem={RenderFolderItem}
+            />
+          ) : (
+            <Text style={styles.comment}>{text[language].NoFoldersYet}</Text>
+          )}
+        </>
       ) : (
         <></>
       )}
@@ -216,8 +222,12 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: width * 0.05,
     color: colors.text,
-    // width: '100%',
     textAlign: 'right',
     flex: 1,
+  },
+  comment: {
+    color: colors.comment,
+    fontSize: width * 0.05,
+    marginTop: width * 0.05,
   },
 })

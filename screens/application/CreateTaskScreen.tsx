@@ -98,7 +98,6 @@ export default function CreateTaskScreen({ navigation, route }: any) {
         <Text style={{ fontSize: width * 0.05, color: colors.text }}>
           {text[language].UrgentTask}
         </Text>
-        {/* <Text style={{ fontSize: width * 0.05, color: colors.text }}>1</Text> */}
         <Switch
           style={{ transform: [{ scale: 1.2 }] }}
           trackColor={{
