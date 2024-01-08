@@ -16,9 +16,11 @@ import rules from '../../constants/rules'
 import { LogIn, Registration, UpdateUser } from '../../functions/actions'
 import { auth } from '../../firebase'
 import Header from '../../components/Header'
+import text from '../../constants/text'
 const width = Dimensions.get('screen').width
 
 export default function NewUserScreen({ navigation, route }: any) {
+  const language = 'UA'
   const [name, setName] = useState<string>(route.params?.user?.name || '')
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -47,12 +49,14 @@ export default function NewUserScreen({ navigation, route }: any) {
 
       <View style={styles.column}>
         <Text style={styles.title}>
-          {route.params?.user?.name ? 'Edit Name' : 'New account'}
+          {route.params?.user?.name
+            ? text[language].EditAccount
+            : text[language].CreateAccount}
         </Text>
         <View style={{ width: '100%', alignItems: 'center' }}>
           <InputTextBlock
             icon="person-outline"
-            type="name"
+            type={text[language].name}
             value={name}
             setValue={(value: string) => {
               setName(value)
@@ -60,7 +64,11 @@ export default function NewUserScreen({ navigation, route }: any) {
           />
 
           <Button
-            title={route.params?.user?.name ? 'Edit' : 'Create account'}
+            title={
+              route.params?.user?.name
+                ? text[language].Save
+                : text[language].Create
+            }
             disable={!(name && !loading)}
             action={UpdateUserFunc}
           />
@@ -86,6 +94,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   title: {
-    fontSize: width * 0.1,
+    fontSize: width * 0.07,
   },
 })

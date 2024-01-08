@@ -2,7 +2,7 @@ const text: any = {
   UA: {
     Clear: 'Очистити',
     Save: 'Зберегти',
-    Title: 'Назва',
+    title: 'назва',
     UrgentTask: 'Термінова задача',
     LastUpdate: 'Оновлене',
     Yesterday: 'Вчора',
@@ -24,6 +24,19 @@ const text: any = {
     ChooseColor: 'Оберіть колір',
     ChooseIcon: 'Оберіть іконку',
     DoYouWantToDeleteFolder: 'Ви хочете видалити папку',
+    CreateFamily: "Створити сім'ю",
+    EnterFamily: "Доєднатись до сім'ї",
+    FamilyFolders: 'Сімейні папки',
+    EditAccount: 'Редагування профілю',
+    CreateAccount: 'Створення профілю',
+    name: "ім'я",
+    password: 'пароль',
+    Settings: 'Налаштування',
+    LogOut: 'Вийти з аккаунту',
+    YourFamilies: "Ваші сім'ї",
+    FamilyPassword: 'Пароль',
+    FamilyUsers: 'Учасники',
+    Enter: 'Доєднатись',
   },
 }
 

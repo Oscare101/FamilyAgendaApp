@@ -17,10 +17,12 @@ import { useState } from 'react'
 import { auth } from '../firebase'
 import { getDatabase, onValue, ref } from 'firebase/database'
 import { UpdateUser } from '../functions/actions'
+import text from '../constants/text'
 
 const width = Dimensions.get('screen').width
 
 export default function ProfileHeader({ navigation }: any) {
+  const language = 'UA'
   const family: Family = useSelector((state: RootState) => state.family)
   const user: User = useSelector((state: RootState) => state.user)
 
@@ -138,7 +140,7 @@ export default function ProfileHeader({ navigation }: any) {
                       <Text
                         style={[styles.familyName, { color: colors.comment }]}
                       >
-                        Create
+                        {text[language].CreateFamily}
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -157,7 +159,7 @@ export default function ProfileHeader({ navigation }: any) {
                       <Text
                         style={[styles.familyName, { color: colors.comment }]}
                       >
-                        Enter a family
+                        {text[language].EnterFamily}
                       </Text>
                     </TouchableOpacity>
                   </>
@@ -209,7 +211,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#00000060',
   },
   modalBlock: {
-    width: width * 0.7,
+    width: width * 0.8,
     backgroundColor: colors.card,
     elevation: 5,
     borderRadius: width * 0.03,

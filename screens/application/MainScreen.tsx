@@ -147,14 +147,18 @@ export default function MainScreen({ navigation }: any) {
         />
       )}
       <View style={styles.rowBetween}>
-        <Text style={styles.addFolderText}>Family folders:</Text>
+        <Text style={styles.addFolderText}>
+          {text[language].FamilyFolders}:
+        </Text>
         <TouchableOpacity
           style={styles.addFolderButton}
           activeOpacity={0.8}
           onPress={() => navigation.navigate('CreateFolderScreen')}
         >
           <Ionicons name="add" size={width * 0.06} color={colors.text} />
-          <Text style={styles.addFolderText}>create folder</Text>
+          <Text style={styles.addFolderText}>
+            {text[language].CreateFolder}
+          </Text>
         </TouchableOpacity>
       </View>
       {family?.folder && Object.values(family?.folder)?.length ? (

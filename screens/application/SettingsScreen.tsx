@@ -18,10 +18,12 @@ import { auth } from '../../firebase'
 import { getDatabase, onValue, ref } from 'firebase/database'
 import Button from '../../components/Button'
 import { LogOut } from '../../functions/actions'
+import text from '../../constants/text'
 
 const width = Dimensions.get('screen').width
 
 export default function SettingsScreen({ navigation }: any) {
+  const language = 'UA'
   const user: User = useSelector((state: RootState) => state.user)
 
   const [families, setFamilies] = useState<any[]>([])
@@ -134,7 +136,7 @@ export default function SettingsScreen({ navigation }: any) {
     <View style={styles.container}>
       <BGCircles />
       <Header
-        title={'Settings'}
+        title={text[language].Settings}
         action={() => {
           navigation.goBack()
         }}
@@ -155,8 +157,12 @@ export default function SettingsScreen({ navigation }: any) {
           <Text style={styles.userEmail}>{user.email}</Text>
         </View>
       </View>
-      <Button title="LogOut" disable={false} action={LogOutFunc} />
-      <Text style={styles.comment}>Your families:</Text>
+      <Button
+        title={text[language].LogOut}
+        disable={false}
+        action={LogOutFunc}
+      />
+      <Text style={styles.comment}>{text[language].YourFamilies}:</Text>
       {families.length && Object.values(users).length ? (
         <FlatList
           style={{ width: '100%' }}
@@ -168,7 +174,7 @@ export default function SettingsScreen({ navigation }: any) {
         />
       ) : (
         <Button
-          title="Create family"
+          title={text[language].CreateFamily}
           disable={false}
           action={() => navigation.navigate('CreateFamilyScreen')}
         />

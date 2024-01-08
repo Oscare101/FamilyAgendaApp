@@ -120,7 +120,7 @@ export default function CreateFolderScreen({ navigation, route }: any) {
       </TouchableOpacity>
 
       <TextInput
-        placeholder={text[language].Title}
+        placeholder={text[language].title}
         value={name}
         placeholderTextColor={colors.comment}
         autoCapitalize="none"

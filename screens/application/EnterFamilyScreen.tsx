@@ -11,10 +11,12 @@ import { useSelector } from 'react-redux'
 import Header from '../../components/Header'
 import InputTextBlock from '../../components/InputTextBlock'
 import { getDatabase, onValue, ref } from 'firebase/database'
+import text from '../../constants/text'
 
 const width = Dimensions.get('screen').width
 
 export default function EnterFamilyScreen({ navigation }: any) {
+  const language = 'UA'
   const user: User = useSelector((state: RootState) => state.user)
 
   const [name, setName] = useState<string>('')
@@ -79,17 +81,17 @@ export default function EnterFamilyScreen({ navigation }: any) {
         value={name}
         setValue={(value: string) => setName(value)}
         icon="text-outline"
-        type="name"
+        type={text[language].name}
       />
       <InputTextBlock
         value={password}
         setValue={(value: string) => setPassword(value)}
         icon="lock-closed-outline"
-        type="password"
+        type={text[language].password}
       />
       <Text style={styles.error}>{error}</Text>
       <Button
-        title="Enter"
+        title={text[language].Enter}
         disable={!(name && password && !loading && families.length)}
         action={EnterFamilyFunc}
       />

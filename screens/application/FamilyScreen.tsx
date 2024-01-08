@@ -16,10 +16,12 @@ import { useEffect, useState } from 'react'
 import { getDatabase, onValue, ref } from 'firebase/database'
 import { auth } from '../../firebase'
 import { Ionicons } from '@expo/vector-icons'
+import text from '../../constants/text'
 
 const width = Dimensions.get('screen').width
 
 export default function FamilyScreen({ navigation }: any) {
+  const language = 'UA'
   const user: User = useSelector((state: RootState) => state.user)
   const family: Family = useSelector((state: RootState) => state.family)
 
@@ -49,22 +51,23 @@ export default function FamilyScreen({ navigation }: any) {
             admin
           </Text>
         ) : family.admin === auth.currentUser?.email ? (
-          <TouchableOpacity
-            style={{
-              backgroundColor: colors.errorBG,
-              height: width * 0.07,
-              paddingHorizontal: width * 0.03,
-              borderRadius: width * 0.01,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Ionicons
-              name="person-remove-outline"
-              size={width * 0.06}
-              color={colors.errorText}
-            />
-          </TouchableOpacity>
+          // <TouchableOpacity
+          //   style={{
+          //     backgroundColor: colors.errorBG,
+          //     height: width * 0.07,
+          //     paddingHorizontal: width * 0.03,
+          //     borderRadius: width * 0.01,
+          //     alignItems: 'center',
+          //     justifyContent: 'center',
+          //   }}
+          // >
+          //   <Ionicons
+          //     name="person-remove-outline"
+          //     size={width * 0.06}
+          //     color={colors.errorText}
+          //   />
+          // </TouchableOpacity>
+          <></>
         ) : (
           <></>
         )}
@@ -82,10 +85,10 @@ export default function FamilyScreen({ navigation }: any) {
         }}
       />
       <View style={[styles.rowBetween, { width: '92%' }]}>
-        <Text style={styles.text}>Family password:</Text>
+        <Text style={styles.text}>{text[language].FamilyPassword}:</Text>
         <Text style={styles.text}>{family.password}</Text>
       </View>
-      <Text style={styles.comment}>Family users:</Text>
+      <Text style={styles.comment}>{text[language].FamilyUsers}:</Text>
       <View style={styles.card}>
         {Object.values(users).length ? (
           <FlatList

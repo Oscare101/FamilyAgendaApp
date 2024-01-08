@@ -16,9 +16,11 @@ import rules from '../../constants/rules'
 import { LogIn, Registration } from '../../functions/actions'
 import { auth } from '../../firebase'
 import Header from '../../components/Header'
+import text from '../../constants/text'
 const width = Dimensions.get('screen').width
 
 export default function RegistrationScreen({ navigation }: any) {
+  const language = 'UA'
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
@@ -57,7 +59,7 @@ export default function RegistrationScreen({ navigation }: any) {
           />
           <InputTextBlock
             icon="lock-closed-outline"
-            type="password"
+            type={text[language].password}
             value={password}
             setValue={(value: string) => {
               setPassword(value.replaceAll(' ', ''))

@@ -139,7 +139,7 @@ export default function TaskBlockModal(props: any) {
           value={title}
           setValue={(value: string) => setTitle(value)}
           icon=""
-          type={text[language].Title}
+          type={text[language].title}
           style={{ borderWidth: 1, borderColor: colors.comment }}
         />
         <View style={styles.rowBetween}>
