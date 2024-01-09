@@ -31,6 +31,34 @@ export default function CreateFamilyScreen({ navigation, route }: any) {
     navigation.goBack()
   }
 
+  async function CreateFamilyFunc() {
+    setLoading(true)
+
+    if (auth.currentUser && auth.currentUser.email) {
+      const id: string =
+        auth.currentUser.email.replace('.', ',') + new Date().getTime()
+
+      const data: Family = {
+        name: name,
+        admin: auth.currentUser.email,
+        id: id,
+        users: [auth.currentUser.email.replace('.', ',')],
+        password: Math.random().toString(36).slice(-6),
+        folder: [],
+      }
+      await CreateFamily(data)
+
+      let userFamiliesId = user?.familiesId || []
+      const newUserData: any = {
+        familiesId: [...userFamiliesId, id],
+        currentFamilyId: id,
+      }
+      await UpdateUser(auth.currentUser.email, newUserData)
+
+      navigation.goBack()
+    }
+  }
+
   return (
     <View style={styles.container}>
       <BGCircles />
@@ -53,7 +81,13 @@ export default function CreateFamilyScreen({ navigation, route }: any) {
           route.params?.family?.id ? text[language].Save : text[language].Create
         }
         disable={!(name && !loading)}
-        action={UpdateFamilyFunc}
+        action={() => {
+          if (route.params?.family?.id) {
+            UpdateFamilyFunc()
+          } else {
+            CreateFamilyFunc()
+          }
+        }}
       />
     </View>
   )

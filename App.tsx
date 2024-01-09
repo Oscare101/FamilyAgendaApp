@@ -33,16 +33,22 @@ export default function App() {
           `user/` + auth.currentUser.email.replace('.', ',')
         )
         onValue(data, (snapshot) => {
-          dispatch(updateUser(snapshot.val() as User))
+          if (snapshot && snapshot.val()) {
+            dispatch(updateUser(snapshot.val() as User))
+          }
         })
       }
     }
 
     async function GetFamilyData(id: string) {
       if (auth.currentUser && auth.currentUser.email) {
+        // TODO - finish bag (leave family -> delete fanily from bd -> user.currentFamilyId still old and get "ReferenceError: Property 'e' doesn't exist, js engine: hermes" )
+
         const data = ref(getDatabase(), `family/` + id)
         onValue(data, (snapshot) => {
-          dispatch(updateFamily(snapshot.val() as Family))
+          if (snapshot && snapshot.val()) {
+            dispatch(updateFamily(snapshot.val() as Family))
+          }
         })
       }
     }

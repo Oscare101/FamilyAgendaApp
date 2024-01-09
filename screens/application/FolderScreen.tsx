@@ -237,18 +237,20 @@ export default function FolderScreen({ navigation, route }: any) {
       >
         <Ionicons name="add" size={width * 0.14} color={colors.bg} />
       </TouchableOpacity>
-      {hintBlock}
 
       {family.folder &&
       family.folder[route.params.folderId]?.task &&
       Object.values(family.folder[route.params.folderId]?.task).length ? (
-        <FlatList
-          style={{ width: '100%' }}
-          data={GetSortedTasks(family.folder[route.params.folderId].task)}
-          renderItem={RenderTask}
-          ListFooterComponent={() => <View style={{ height: width * 0.3 }} />}
-          showsVerticalScrollIndicator={false}
-        />
+        <>
+          {hintBlock}
+          <FlatList
+            style={{ width: '100%' }}
+            data={GetSortedTasks(family.folder[route.params.folderId].task)}
+            renderItem={RenderTask}
+            ListFooterComponent={() => <View style={{ height: width * 0.3 }} />}
+            showsVerticalScrollIndicator={false}
+          />
+        </>
       ) : (
         <Text style={styles.comment}>{text[language].NoTasksYet}</Text>
       )}

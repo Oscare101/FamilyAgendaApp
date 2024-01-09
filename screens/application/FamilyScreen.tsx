@@ -48,7 +48,6 @@ export default function FamilyScreen({ navigation }: any) {
         ...family,
         users: newUsersData,
       }
-
       await UpdateFamily(newFamilyData)
 
       const newFamiliesId = user?.familiesId?.filter(

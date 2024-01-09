@@ -91,7 +91,7 @@ export default function ProfileHeader({ navigation }: any) {
           }}
         >
           <Text numberOfLines={1} style={styles.title}>
-            {family.id === user.currentFamilyId ? family.name : ''}
+            {family?.id === user?.currentFamilyId ? family.name : ''}
           </Text>
           <Ionicons
             name="caret-down-outline"
