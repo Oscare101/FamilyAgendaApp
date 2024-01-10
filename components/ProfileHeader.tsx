@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
     fontSize: width * 0.07,
     color: colors.text,
     marginRight: width * 0.02,
+    maxWidth: '80%',
   },
   // MODAL
   modal: {

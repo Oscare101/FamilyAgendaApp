@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux'
 import Header from '../../components/Header'
 import InputTextBlock from '../../components/InputTextBlock'
 import text from '../../constants/text'
+import rules from '../../constants/rules'
 
 export default function CreateFamilyScreen({ navigation, route }: any) {
   const language = 'UA'
