@@ -12,6 +12,7 @@ import Header from '../../components/Header'
 import InputTextBlock from '../../components/InputTextBlock'
 import text from '../../constants/text'
 import rules from '../../constants/rules'
+import InputLengthBlock from '../../components/InputLenghtBlock'
 
 export default function CreateFamilyScreen({ navigation, route }: any) {
   const language = 'UA'
@@ -73,10 +74,13 @@ export default function CreateFamilyScreen({ navigation, route }: any) {
       />
       <InputTextBlock
         value={name}
-        setValue={(value: string) => setName(value)}
+        setValue={(value: string) =>
+          setName(value.slice(0, rules.maxFamilyNameLength))
+        }
         icon="text-outline"
         type={text[language].name}
       />
+      <InputLengthBlock length={name.length} max={rules.maxFamilyNameLength} />
       <Button
         title={
           route.params?.family?.id ? text[language].Save : text[language].Create

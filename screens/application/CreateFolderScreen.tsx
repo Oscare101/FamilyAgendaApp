@@ -24,6 +24,8 @@ import { Ionicons } from '@expo/vector-icons'
 import text from '../../constants/text'
 import DeleteModal from '../../components/DeleteModal'
 import IconColorBlock from '../../components/IconColorBlock'
+import InputLengthBlock from '../../components/InputLenghtBlock'
+import rules from '../../constants/rules'
 
 const width = Dimensions.get('screen').width
 
@@ -128,7 +130,9 @@ export default function CreateFolderScreen({ navigation, route }: any) {
           marginLeft: '4%',
           color: colors.text,
         }}
-        onChangeText={(value: string) => setName(value)}
+        onChangeText={(value: string) =>
+          setName(value.slice(0, rules.maxFolderNameLength))
+        }
       />
     </View>
   )
@@ -145,6 +149,8 @@ export default function CreateFolderScreen({ navigation, route }: any) {
         action={() => navigation.goBack()}
       />
       {input}
+      <InputLengthBlock length={name.length} max={rules.maxFolderNameLength} />
+
       <IconColorBlock
         color={color}
         icon={icon}
