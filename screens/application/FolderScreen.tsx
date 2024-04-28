@@ -124,7 +124,11 @@ export default function FolderScreen({ navigation, route }: any) {
             if (direction === 'left') {
               ToggleTaskFunc(item)
             } else {
-              setModal(item)
+              if (item.doneBy) {
+                DeleteTaskFunc(item.id)
+              } else {
+                setModal(item)
+              }
             }
           }}
         >
