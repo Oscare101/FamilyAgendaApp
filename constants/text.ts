@@ -52,6 +52,7 @@ const text: any = {
     Done: 'Виконано',
     Executant: 'Виконавець',
     DoneTime: 'Виконано',
+    DeleteAllCompletedTasks: 'Видалити зроблені задачі',
   },
 }
 

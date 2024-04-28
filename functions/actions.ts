@@ -182,3 +182,15 @@ export async function DeleteTask(
     console.log('DeleteTask', error)
   }
 }
+
+export async function UpdateAllTasks(
+  familyId: string,
+  folderId: string,
+  data: Task[]
+) {
+  try {
+    set(ref(getDatabase(), `family/${familyId}/folder/${folderId}/task`), data)
+  } catch (error) {
+    console.log('UpdateAllTasks', error)
+  }
+}

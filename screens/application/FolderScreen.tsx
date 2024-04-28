@@ -9,14 +9,14 @@ import {
 } from 'react-native'
 import colors from '../../constants/colors'
 import BGCircles from '../../components/BGCircles'
-import { Family, User } from '../../constants/interfaces'
+import { Family, Task, User } from '../../constants/interfaces'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import Header from '../../components/Header'
 
 import { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
-import { DeleteTask, UpdateTask } from '../../functions/actions'
+import { DeleteTask, UpdateAllTasks, UpdateTask } from '../../functions/actions'
 import { auth } from '../../firebase'
 import { GetLastUpdated, GetSortedTasks } from '../../functions/function'
 import { Swipeable } from 'react-native-gesture-handler'
@@ -74,6 +74,19 @@ export default function FolderScreen({ navigation, route }: any) {
       DeleteTask(family.id, route.params.folderId, id)
       CloseSwipeables()
     }
+  }
+
+  function ClearDoneTasks() {
+    if (!family.folder[route.params.folderId]?.task) return false
+    let newTasks: any = {}
+    Object.values(family.folder[route.params.folderId].task).forEach(
+      (t: Task) => {
+        if (!t.doneBy) {
+          newTasks[t.id] = t
+        }
+      }
+    )
+    UpdateAllTasks(family.id, route.params.folderId, newTasks)
   }
 
   function RenderTask({ item, index }: any) {
@@ -215,28 +228,6 @@ export default function FolderScreen({ navigation, route }: any) {
           })
         }}
       />
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() =>
-          navigation.navigate('CreateTaskScreen', {
-            folderId: route.params.folderId,
-          })
-        }
-        style={{
-          width: width * 0.2,
-          height: width * 0.2,
-          borderRadius: width * 0.2,
-          backgroundColor: colors.active,
-          position: 'absolute',
-          bottom: width * 0.05,
-          right: width * 0.05,
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 2,
-        }}
-      >
-        <Ionicons name="add" size={width * 0.14} color={colors.bg} />
-      </TouchableOpacity>
 
       {family.folder &&
       family.folder[route.params.folderId]?.task &&
@@ -254,6 +245,53 @@ export default function FolderScreen({ navigation, route }: any) {
       ) : (
         <Text style={styles.comment}>{text[language].NoTasksYet}</Text>
       )}
+      <View
+        style={{
+          flexDirection: 'row',
+          position: 'absolute',
+          bottom: width * 0.05,
+          zIndex: 2,
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '92%',
+          gap: width * 0.05,
+        }}
+      >
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={ClearDoneTasks}
+          style={{
+            flex: 1,
+            height: width * 0.2,
+            borderRadius: width * 0.2,
+            backgroundColor: colors.active,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Text style={{ fontSize: width * 0.045, color: colors.text }}>
+            {text[language].DeleteAllCompletedTasks}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() =>
+            navigation.navigate('CreateTaskScreen', {
+              folderId: route.params.folderId,
+            })
+          }
+          style={{
+            width: width * 0.2,
+            height: width * 0.2,
+            borderRadius: width * 0.2,
+            backgroundColor: colors.active,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Ionicons name="add" size={width * 0.14} color={colors.bg} />
+        </TouchableOpacity>
+      </View>
       {/* MODAL */}
       <DeleteModal
         modal={modal}
