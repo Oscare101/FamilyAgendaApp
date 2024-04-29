@@ -42,7 +42,7 @@ export default function TaskStatBlock(props: any) {
       title: text[language].Author,
       value:
         users[
-          family.folder[props.folderId].task[props.taskId].author.replace(
+          family.folder[props.folderId].task[props.taskId].author.replaceAll(
             '.',
             ','
           )
@@ -68,7 +68,7 @@ export default function TaskStatBlock(props: any) {
       title: text[language].Executant,
       value:
         users[
-          family.folder[props.folderId].task[props.taskId].doneBy?.replace(
+          family.folder[props.folderId].task[props.taskId].doneBy?.replaceAll(
             '.',
             ','
           )
