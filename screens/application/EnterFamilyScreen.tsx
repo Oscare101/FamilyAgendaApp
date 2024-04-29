@@ -51,8 +51,6 @@ export default function EnterFamilyScreen({ navigation }: any) {
     const foundFamily = families.find(
       (f: Family) => f.name === name && f.password === password
     )
-    console.log(foundFamily.users)
-
     if (
       foundFamily !== undefined &&
       !(
