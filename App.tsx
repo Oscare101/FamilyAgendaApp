@@ -30,7 +30,7 @@ export default function App() {
       if (auth.currentUser && auth.currentUser.email) {
         const data = ref(
           getDatabase(),
-          `user/` + auth.currentUser.email.replace('.', ',')
+          `user/` + auth.currentUser.email.replaceAll('.', ',')
         )
         onValue(data, (snapshot) => {
           if (snapshot && snapshot.val()) {

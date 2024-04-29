@@ -42,7 +42,7 @@ export default function FamilyScreen({ navigation }: any) {
   async function LeaveFamilyFunc() {
     if (auth.currentUser && auth.currentUser.email) {
       const newUsersData = family.users.filter(
-        (u: any) => u !== auth.currentUser!.email?.replace('.', ',')
+        (u: any) => u !== auth.currentUser!.email?.replaceAll('.', ',')
       )
       const newFamilyData: any = {
         ...family,

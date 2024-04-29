@@ -57,7 +57,7 @@ export default function EnterFamilyScreen({ navigation }: any) {
       !(
         (foundFamily.users &&
           foundFamily.users.includes(
-            auth.currentUser?.email?.replace('.', ',')
+            auth.currentUser?.email?.replaceAll('.', ',')
           )) ||
         foundFamily.users
       ) &&
@@ -68,7 +68,7 @@ export default function EnterFamilyScreen({ navigation }: any) {
         ...foundFamily,
         users: [
           ...(foundFamily?.users || []),
-          auth.currentUser.email.replace('.', ','),
+          auth.currentUser.email.replaceAll('.', ','),
         ],
       }
 

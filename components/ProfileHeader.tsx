@@ -37,7 +37,7 @@ export default function ProfileHeader({ navigation }: any) {
           Object.values(snapshot.val()).filter(
             (f: any) =>
               f.users &&
-              f.users.includes(auth.currentUser!.email?.replace('.', ','))
+              f.users.includes(auth.currentUser!.email?.replaceAll('.', ','))
           )
         )
       })

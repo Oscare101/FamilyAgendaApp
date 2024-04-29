@@ -47,7 +47,7 @@ export default function SettingsScreen({ navigation }: any) {
           Object.values(snapshot.val()).filter(
             (f: any) =>
               f.users &&
-              f.users.includes(auth.currentUser!.email?.replace('.', ','))
+              f.users.includes(auth.currentUser!.email?.replaceAll('.', ','))
           )
         )
       })
@@ -75,7 +75,7 @@ export default function SettingsScreen({ navigation }: any) {
     return (
       <View style={styles.rowBetween}>
         <Text numberOfLines={1} style={styles.userItemName}>
-          {users![item.replace('.', ',')]!.name}
+          {users![item.replaceAll('.', ',')]!.name}
         </Text>
       </View>
     )

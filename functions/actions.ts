@@ -28,6 +28,8 @@ export async function Registration(email: string, password: string) {
     await AsyncStorage.setItem('email', email)
     await AsyncStorage.setItem('password', password)
     await SetNewUser(email)
+    console.log(response)
+
     return { response: response }
   } catch (error: any) {
     if (error.code.includes('email-already-in-use')) {
@@ -71,7 +73,7 @@ export async function LogOut() {
 export async function SetNewUser(email: string) {
   try {
     await set(
-      ref(getDatabase(), 'user/' + email.replace('.', ',')),
+      ref(getDatabase(), 'user/' + email.replaceAll('.', ',')),
       NewUser(email)
     )
   } catch (error) {
@@ -81,7 +83,7 @@ export async function SetNewUser(email: string) {
 
 export async function UpdateUser(email: string, data: any) {
   try {
-    update(ref(getDatabase(), 'user/' + email.replace('.', ',')), data)
+    update(ref(getDatabase(), 'user/' + email.replaceAll('.', ',')), data)
   } catch (error) {
     console.log('UpdateUser', error)
   }

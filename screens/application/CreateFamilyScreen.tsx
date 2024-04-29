@@ -38,13 +38,13 @@ export default function CreateFamilyScreen({ navigation, route }: any) {
 
     if (auth.currentUser && auth.currentUser.email) {
       const id: string =
-        auth.currentUser.email.replace('.', ',') + new Date().getTime()
+        auth.currentUser.email.replaceAll('.', ',') + new Date().getTime()
 
       const data: Family = {
         name: name,
         admin: auth.currentUser.email,
         id: id,
-        users: [auth.currentUser.email.replace('.', ',')],
+        users: [auth.currentUser.email.replaceAll('.', ',')],
         password: Math.random().toString(36).slice(-6),
         folder: [],
       }
