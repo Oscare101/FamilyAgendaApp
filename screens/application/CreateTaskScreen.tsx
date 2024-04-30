@@ -12,7 +12,7 @@ import { auth } from '../../firebase'
 import BGCircles from '../../components/BGCircles'
 import Button from '../../components/Button'
 import { CreateTask, DeleteTask, UpdateTask } from '../../functions/actions'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { Family, Task } from '../../constants/interfaces'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
@@ -93,7 +93,10 @@ export default function CreateTaskScreen({ navigation, route }: any) {
             ? text[language].UpdateTask
             : text[language].CreateTask
         }
-        action={() => navigation.goBack()}
+        action={() => {
+          Keyboard.dismiss()
+          navigation.goBack()
+        }}
       />
 
       <InputTextBlock
